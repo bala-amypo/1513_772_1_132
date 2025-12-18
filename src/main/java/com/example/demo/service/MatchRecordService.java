@@ -5,12 +5,11 @@ import com.example.demo.model.MatchRecord;
 
 public interface MatchRecordService {
 
-    MatchRecord createMatch(MatchRecord record);
-
-    MatchRecord updateMatch(Long id, MatchRecord record);
+    MatchRecord generateMatch(Long userId);
 
     MatchRecord getMatchById(Long id);
 
-    List<MatchRecord> getMatchesByUser(Long userId);
-}
+    List<MatchRecord> getMatchesForUser(Long userId);
 
+    MatchRecord updateMatchStatus(Long id, String status);
+}

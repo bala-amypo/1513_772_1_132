@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,14 +19,11 @@ public class MatchRecordServiceImpl implements MatchRecordService {
     }
 
     @Override
-    public MatchRecord createMatch(MatchRecord record) {
-        return repository.save(record);
-    }
-
-    @Override
-    public MatchRecord updateMatch(Long id, MatchRecord record) {
-        record.setId(id);
-        return repository.save(record);
+    public MatchRecord generateMatch(Long userId) {
+        MatchRecord match = new MatchRecord();
+        match.setStatus("PENDING");
+        match.setMatchedAt(LocalDateTime.now());
+        return repository.save(match);
     }
 
     @Override
@@ -34,10 +32,20 @@ public class MatchRecordServiceImpl implements MatchRecordService {
     }
 
     @Override
-    public List<MatchRecord> getMatchesByUser(Long userId) {
+    public List<MatchRecord> getMatchesForUser(Long userId) {
         List<MatchRecord> result = new ArrayList<>();
-        result.addAll(repository.findByUserA_Id(userId));
-        result.addAll(repository.findByUserB_Id(userId));
+        result.addAll(repository.findByUserAId(userId));
+        result.addAll(repository.findByUserBId(userId));
         return result;
+    }
+
+    @Override
+    public MatchRecord updateMatchStatus(Long id, String status) {
+        MatchRecord match = repository.findById(id).orElse(null);
+        if (match != null) {
+            match.setStatus(status);
+            return repository.save(match);
+        }
+        return null;
     }
 }
