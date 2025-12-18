@@ -7,11 +7,11 @@ public interface SkillService {
 
     Skill createSkill(Skill skill);
 
-    Skill updateSkill(Long id, Skill skillDetails);
-
-    List<Skill> getAllSkills();
+    Skill updateSkill(Long id, Skill skill); // throw "Skill not found"
 
     Skill getSkillById(Long id);
 
-    void deleteSkill(Long id);
+    List<Skill> getAllSkills();
+
+    Skill deactivateSkill(Long id);
 }
