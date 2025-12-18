@@ -17,25 +17,29 @@ public class MatchRecordController {
         this.service = service;
     }
 
-    @PostMapping
-    public MatchRecord create(@RequestBody MatchRecord record) {
-        return service.createMatch(record);
+    // Generate match for a user
+    @PostMapping("/generate/{userId}")
+    public MatchRecord generateMatch(@PathVariable Long userId) {
+        return service.generateMatch(userId);
     }
 
-    @PutMapping("/{id}")
-    public MatchRecord update(@PathVariable Long id,
-                              @RequestBody MatchRecord record) {
-        return service.updateMatch(id, record);
-    }
-
+    // Get match by id
     @GetMapping("/{id}")
-    public MatchRecord getById(@PathVariable Long id) {
+    public MatchRecord getMatchById(@PathVariable Long id) {
         return service.getMatchById(id);
     }
 
+    // Get matches for a user
     @GetMapping("/user/{userId}")
-    public List<MatchRecord> getByUser(@PathVariable Long userId) {
-        return service.getMatchesByUser(userId);
+    public List<MatchRecord> getMatchesForUser(@PathVariable Long userId) {
+        return service.getMatchesForUser(userId);
+    }
+
+    // Update match status
+    @PutMapping("/{id}/status")
+    public MatchRecord updateStatus(
+            @PathVariable Long id,
+            @RequestParam String status) {
+        return service.updateMatchStatus(id, status);
     }
 }
-
