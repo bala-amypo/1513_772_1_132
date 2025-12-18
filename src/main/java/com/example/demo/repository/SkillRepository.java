@@ -6,5 +6,4 @@ import com.example.demo.model.Skill;
 
 @Repository
 public interface SkillRepository extends JpaRepository<Skill, Long> {
-    // Optional: you can add custom queries if needed
 }
