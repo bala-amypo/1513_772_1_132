@@ -1,9 +1,5 @@
 package com.example.demo.model;
 
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.CreationTimestamp;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,72 +14,62 @@ public class Skill {
     private Long id;
 
     @Column(unique = true, nullable = false)
-    private String username;
+    private String name;
 
-    @Column(unique = true, nullable = false)
-    private String email;
-
-    private String bio;
+    private String category;
+    private String description;
     private Boolean active;
 
-    @CreationTimestamp
-    private LocalDateTime createdat;
-    @CreationTimestamp
-    private LocalDateTime updatedat;
+    // Constructors
+    public Skill() {
+    }
+
+    public Skill(Long id, String name, String category, String description, Boolean active) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.description = description;
+        this.active = active;
+    }
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
+
     public void setId(Long id) {
         this.id = id;
     }
-    public String getUsername() {
-        return username;
+
+    public String getName() {
+        return name;
     }
-    public void setUsername(String username) {
-        this.username = username;
+
+    public void setName(String name) {
+        this.name = name;
     }
-    public String getEmail() {
-        return email;
+
+    public String getCategory() {
+        return category;
     }
-    public void setEmail(String email) {
-        this.email = email;
+
+    public void setCategory(String category) {
+        this.category = category;
     }
-    public String getBio() {
-        return bio;
+
+    public String getDescription() {
+        return description;
     }
-    public void setBio(String bio) {
-        this.bio = bio;
+
+    public void setDescription(String description) {
+        this.description = description;
     }
+
     public Boolean getActive() {
         return active;
     }
+
     public void setActive(Boolean active) {
         this.active = active;
     }
-    public LocalDateTime getCreatedat() {
-        return createdat;
-    }
-    public void setCreatedat(LocalDateTime createdat) {
-        this.createdat = createdat;
-    }
-    public LocalDateTime getUpdatedat() {
-        return updatedat;
-    }
-    public void setUpdatedat(LocalDateTime updatedat) {
-        this.updatedat = updatedat;
-    }
-    public Skill(Long id, String username, String email, String bio, Boolean active, LocalDateTime createdat,
-            LocalDateTime updatedat) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-        this.bio = bio;
-        this.active = active;
-        this.createdat = createdat;
-        this.updatedat = updatedat;
-    }
-    public Skill() {
-    }
-    
-
 }
