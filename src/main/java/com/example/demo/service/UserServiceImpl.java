@@ -1,7 +1,5 @@
 package com.example.demo.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.User;
@@ -17,30 +15,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(User user) {
+    public User register(User user) {
         return repository.save(user);
     }
 
     @Override
-    public User findById(Long id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    @Override
-    public List<User> findAll() {
-        return repository.findAll();
-    }
-
-    @Override
-    public void delete(Long id) {
-        repository.deleteById(id);
-    }
-
-    @Override
-    public User findByEmail(String email) {
+    public User login(String email, String password) {
         return repository.findAll()
                 .stream()
-                .filter(u -> email.equals(u.getEmail()))
+                .filter(u -> u.getEmail().equals(email) && u.getPassword().equals(password))
                 .findFirst()
                 .orElse(null);
     }
