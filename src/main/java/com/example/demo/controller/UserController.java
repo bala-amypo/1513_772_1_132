@@ -37,12 +37,11 @@ public class UserController {
     }
 
     @PutMapping("/{id}/rating")
-    public ResponseEntity<User> updateRating(@PathVariable Long id, @RequestBody Map<String, Double> body) {
-        if (!body.containsKey("rating")) {
-            return ResponseEntity.badRequest().body(null);
-        }
-        double rating = body.get("rating");
-        return ResponseEntity.ok(userService.updateUserRating(id, rating));
+    public ResponseEntity<User> updateRating(
+            @PathVariable Long id,
+            @RequestBody RatingBody body) { // Use inner class
+
+        return ResponseEntity.ok(userService.updateUserRating(id, body.getRating()));
     }
 
     @ExceptionHandler(EmailAlreadyInUseException.class)
@@ -50,5 +49,17 @@ public class UserController {
         Map<String, String> error = new HashMap<>();
         error.put("error", ex.getMessage());
         return ResponseEntity.badRequest().body(error);
+    }
+
+    public static class RatingBody {
+        private double rating;
+
+        public double getRating() {
+            return rating;
+        }
+
+        public void setRating(double rating) {
+            this.rating = rating;
+        }
     }
 }
