@@ -1,10 +1,10 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.exception.BadRequestException;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
 import com.example.demo.service.UserService;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.exception.BadRequestException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +23,6 @@ public class UserServiceImpl implements UserService {
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new BadRequestException("Email already in use");
         }
-        user.setRating(0.0);
         return userRepository.save(user);
     }
 
@@ -43,5 +42,19 @@ public class UserServiceImpl implements UserService {
         User user = getUserById(id);
         user.setRating(rating);
         return userRepository.save(user);
+    }
+
+    @Override
+    public User login(String email, String password) {
+        User user = userRepository.findAll().stream()
+                .filter(u -> u.getEmail().equals(email))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        if (!user.getPassword().equals(password)) {
+            throw new BadRequestException("Invalid credentials");
+        }
+
+        return user;
     }
 }
