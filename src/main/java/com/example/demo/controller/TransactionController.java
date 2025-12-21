@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/transactions")
-public class TransactionController {
+public class TraznsactionController {
 
     private final TransactionService transactionService;
 
