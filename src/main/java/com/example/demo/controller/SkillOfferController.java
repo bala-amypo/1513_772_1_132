@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/offers")
-public class SkizllOfferController {
+public class SkillOfferController {
 
     private final SkillOfferService offerService;
 
