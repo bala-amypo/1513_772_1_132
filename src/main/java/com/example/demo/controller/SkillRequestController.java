@@ -1,45 +1,49 @@
 package com.example.demo.controller;
 
-import java.util.List;
-
-import org.springframework.web.bind.annotation.*;
-
 import com.example.demo.model.SkillRequest;
 import com.example.demo.service.SkillRequestService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/skill-requests")
+@RequestMapping("/api/requests")
 public class SkillRequestController {
 
-    private final SkillRequestService service;
+    private final SkillRequestService requestService;
 
-    public SkillRequestController(SkillRequestService service) {
-        this.service = service;
+    public SkillRequestController(SkillRequestService requestService) {
+        this.requestService = requestService;
     }
 
     @PostMapping
-    public SkillRequest create(@RequestBody SkillRequest request) {
-        return service.createRequest(request);
+    public ResponseEntity<SkillRequest> createRequest(@RequestBody SkillRequest request) {
+        return ResponseEntity.ok(requestService.createRequest(request));
     }
 
-    @PutMapping("/{id}")
-    public SkillRequest update(@PathVariable Long id, @RequestBody SkillRequest request) {
-        return service.updateRequest(id, request);
+    @GetMapping
+    public ResponseEntity<List<SkillRequest>> getAllRequests() {
+        return ResponseEntity.ok(requestService.getAllRequests());
     }
 
     @GetMapping("/{id}")
-    public SkillRequest getById(@PathVariable Long id) {
-        return service.getRequestById(id);
+    public ResponseEntity<SkillRequest> getRequest(@PathVariable Long id) {
+        return ResponseEntity.ok(requestService.getRequestById(id));
     }
 
     @GetMapping("/user/{userId}")
-    public List<SkillRequest> getByUser(@PathVariable Long userId) {
-        return service.getRequestsByUser(userId);
+    public ResponseEntity<List<SkillRequest>> getByUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(requestService.getRequestsByUser(userId));
     }
 
-    @PutMapping("/{id}/deactivate")
-    public void deactivate(@PathVariable Long id) {
-        service.deactivateRequest(id);
+    @GetMapping("/category/{categoryId}")
+    public ResponseEntity<List<SkillRequest>> getByCategory(@PathVariable Long categoryId) {
+        return ResponseEntity.ok(requestService.getRequestsByCategory(categoryId));
+    }
+
+    @GetMapping("/open")
+    public ResponseEntity<List<SkillRequest>> getOpenRequests() {
+        return ResponseEntity.ok(requestService.getOpenRequests());
     }
 }
-
