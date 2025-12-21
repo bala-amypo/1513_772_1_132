@@ -12,6 +12,4 @@ public interface UserService {
     List<User> getAllUsers();
 
     User updateUserRating(Long id, double rating);
-
-    User login(String email, String password);
 }
