@@ -1,11 +1,9 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name = "skill_offers")
 public class SkillOffer {
 
     @Id
@@ -13,57 +11,41 @@ public class SkillOffer {
     private Long id;
 
     private Long userId;
-    private Long skillId;
-    private String experienceLevel;
-    private Integer availableHoursPerWeek;
-    private Boolean active;
+    private Long categoryId;
+    private String description;
+
+    private boolean available = true;
+
+    public SkillOffer() {}
+
+    public SkillOffer(Long userId, Long categoryId, String description) {
+        this.userId = userId;
+        this.categoryId = categoryId;
+        this.description = description;
+        this.available = true;
+    }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Long getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public Long getCategoryId() {
+        return categoryId;
     }
 
-    public Long getSkillId() {
-        return skillId;
+    public String getDescription() {
+        return description;
     }
 
-    public void setSkillId(Long skillId) {
-        this.skillId = skillId;
+    public boolean isAvailable() {
+        return available;
     }
 
-    public String getExperienceLevel() {
-        return experienceLevel;
-    }
-
-    public void setExperienceLevel(String experienceLevel) {
-        this.experienceLevel = experienceLevel;
-    }
-
-    public Integer getAvailableHoursPerWeek() {
-        return availableHoursPerWeek;
-    }
-
-    public void setAvailableHoursPerWeek(Integer availableHoursPerWeek) {
-        this.availableHoursPerWeek = availableHoursPerWeek;
-    }
-
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 }
-
