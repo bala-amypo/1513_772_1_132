@@ -1,4 +1,4 @@
-package com.example.barter.exception;
+package com.example.demo.exception;
 
 public class EmailAlreadyInUseException extends RuntimeException {
 
