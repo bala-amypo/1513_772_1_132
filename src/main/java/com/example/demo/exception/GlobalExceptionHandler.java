@@ -1,6 +1,7 @@
 package com.example.demo.exception;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -17,8 +18,16 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(404).body(ex.getMessage());
     }
 
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<String> handleValidationException(MethodArgumentNotValidException ex) {
+        String message = ex.getBindingResult()
+                .getFieldError()
+                .getDefaultMessage();
+        return ResponseEntity.badRequest().body(message);
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralException(Exception ex) {
-        return ResponseEntity.status(404).body(ex.getMessage());
+        return ResponseEntity.status(500).body(ex.getMessage());
     }
 }
