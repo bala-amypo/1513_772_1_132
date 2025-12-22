@@ -19,6 +19,6 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralException(Exception ex) {
-        return ResponseEntity.body(ex.getMessage());
+        return ResponseEntity.status(404).body(ex.getMessage());
     }
 }
