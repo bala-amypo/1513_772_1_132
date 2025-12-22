@@ -52,55 +52,20 @@ public class User {
         this.password = encoder.encode(password);
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
+    public Long getId() { return id; }
+    public String getFullName() { return fullName; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+    public double getRating() { return rating; }
     public void setRating(double rating) {
-        if (rating >= 0.0 && rating <= 5.0) {
-            this.rating = rating;
-        }
+        if (rating >= 0.0 && rating <= 5.0) this.rating = rating;
     }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
+    public String getLocation() { return location; }
+    public void setLocation(String location) { this.location = location; }
+    public String getRole() { return role; }
     public void setRole(String role) {
-        if (role.equals("ADMIN") || role.equals("USER")) {
-            this.role = role;
-        }
+        if ("ADMIN".equals(role) || "USER".equals(role)) this.role = role;
     }
-
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
 }
