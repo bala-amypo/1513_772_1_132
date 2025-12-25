@@ -1,6 +1,6 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -20,7 +20,6 @@ public class UserProfile {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
     
-    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     
