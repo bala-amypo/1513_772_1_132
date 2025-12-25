@@ -1,59 +1,38 @@
 package com.example.demo.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "skill_requests")
 public class SkillRequest {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private Long requesterId;
-    private String skillName;
-    private boolean fulfilled;
-
-    public SkillRequest() {
-    }
-
-    public SkillRequest(Long requesterId, String skillName, boolean fulfilled) {
-        this.requesterId = requesterId;
-        this.skillName = skillName;
-        this.fulfilled = fulfilled;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getRequesterId() {
-        return requesterId;
-    }
-
-    public void setRequesterId(Long requesterId) {
-        this.requesterId = requesterId;
-    }
-
-    public String getSkillName() {
-        return skillName;
-    }
-
-    public void setSkillName(String skillName) {
-        this.skillName = skillName;
-    }
-
-    public boolean isFulfilled() {
-        return fulfilled;
-    }
-
-    public void setFulfilled(boolean fulfilled) {
-        this.fulfilled = fulfilled;
-    }
+    
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserProfile user;
+    
+    @ManyToOne
+    @JoinColumn(name = "skill_id")
+    private Skill skill;
+    
+    private String urgencyLevel;
+    private boolean active = true;
+    
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    
+    public UserProfile getUser() { return user; }
+    public void setUser(UserProfile user) { this.user = user; }
+    
+    public Skill getSkill() { return skill; }
+    public void setSkill(Skill skill) { this.skill = skill; }
+    
+    public String getUrgencyLevel() { return urgencyLevel; }
+    public void setUrgencyLevel(String urgencyLevel) { this.urgencyLevel = urgencyLevel; }
+    
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
 }
