@@ -27,13 +27,17 @@ public class AuthController {
     
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
-        
-        AppUser user = userService.findByEmail(request.getEmail());
-        String token = jwtUtil.generateToken(user.getEmail(), user.getRole(), user.getId());
-        
-        return ResponseEntity.ok(new LoginResponse(user.getEmail(), token));
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            );
+            
+            AppUser user = userService.findByEmail(request.getEmail());
+            String token = jwtUtil.generateToken(user.getEmail(), user.getRole(), user.getId());
+            
+            return ResponseEntity.ok(new LoginResponse(user.getEmail(), token));
+        } catch (Exception e) {
+            throw new RuntimeException("Bad credentials");
+        }
     }
 }

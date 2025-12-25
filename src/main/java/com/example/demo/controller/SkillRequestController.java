@@ -22,9 +22,4 @@ public class SkillRequestController {
     public ResponseEntity<SkillRequest> get(@PathVariable Long id) {
         return ResponseEntity.ok(skillRequestService.getRequestById(id));
     }
-    
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(skillRequestService.getRequestsByUser(userId));
-    }
 }

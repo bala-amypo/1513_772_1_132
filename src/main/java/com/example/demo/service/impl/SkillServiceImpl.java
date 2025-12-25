@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.Skill;
+import com.example.demo.service.SkillService;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +28,7 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public void deleteSkill(Long id) {
-        // Delete implementation
+        // Implementation
     }
     
     @Override

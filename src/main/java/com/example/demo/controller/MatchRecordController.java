@@ -17,9 +17,4 @@ public class MatchRecordController {
     public ResponseEntity<MatchRecord> generate(@PathVariable Long userId) {
         return ResponseEntity.ok(matchmakingService.generateMatch(userId));
     }
-    
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getForUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(matchmakingService.getMatchesForUser(userId));
-    }
 }

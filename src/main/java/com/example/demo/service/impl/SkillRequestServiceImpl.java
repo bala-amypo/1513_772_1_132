@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.SkillRequest;
+import com.example.demo.service.SkillRequestService;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;

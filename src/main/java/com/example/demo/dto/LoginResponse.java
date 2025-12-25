@@ -4,7 +4,6 @@ public class LoginResponse {
     private String email;
     private String token;
     
-    // Constructors
     public LoginResponse() {}
     
     public LoginResponse(String email, String token) {
@@ -12,7 +11,6 @@ public class LoginResponse {
         this.token = token;
     }
     
-    // Getters and Setters
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     

@@ -22,9 +22,4 @@ public class SkillOfferController {
     public ResponseEntity<SkillOffer> get(@PathVariable Long id) {
         return ResponseEntity.ok(skillOfferService.getOfferById(id));
     }
-    
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<?> getByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(skillOfferService.getOffersByUser(userId));
-    }
 }

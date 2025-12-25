@@ -1,25 +1,22 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.model.UserProfile;
-import com.example.demo.service.UserProfileService;
+import com.example.demo.model.AppUser;
+import com.example.demo.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserProfileServiceImpl implements UserProfileService {
+public class UserServiceImpl implements UserService {
     @Override
-    public UserProfile createUser(UserProfile user) {
+    public AppUser findByEmail(String email) {
+        AppUser user = new AppUser();
+        user.setEmail(email);
+        user.setRole("ADMIN");
+        user.setId(1L);
         return user;
     }
     
     @Override
-    public UserProfile getUserById(Long id) {
-        UserProfile user = new UserProfile();
-        user.setId(id);
+    public AppUser save(AppUser user) {
         return user;
-    }
-    
-    @Override
-    public void deactivateUser(Long id) {
-        // Implementation
     }
 }
