@@ -1,6 +1,5 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.model.SkillOffer;
 import com.example.demo.repository.SkillOfferRepository;
 import com.example.demo.service.SkillOfferService;
@@ -25,26 +24,11 @@ public class SkillOfferServiceImpl implements SkillOfferService {
     @Override
     public SkillOffer getOfferById(Long id) {
         return repo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Offer not found"));
-    }
-
-    @Override
-    public List<SkillOffer> getAllOffers() {
-        return repo.findAll();
+                .orElseThrow(() -> new RuntimeException("Offer not found"));
     }
 
     @Override
     public List<SkillOffer> getOffersByUser(Long userId) {
         return repo.findByUserId(userId);
-    }
-
-    @Override
-    public List<SkillOffer> getOffersByCategory(Long categoryId) {
-        return repo.findByCategoryId(categoryId);
-    }
-
-    @Override
-    public List<SkillOffer> getAvailableOffers() {
-        return repo.findByAvailableTrue();
     }
 }
