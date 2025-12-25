@@ -7,6 +7,4 @@ import java.util.List;
 
 public interface SkillRequestRepository extends JpaRepository<SkillRequest, Long> {
     List<SkillRequest> findByUserId(Long userId);
-    List<SkillRequest> findByCategoryId(Long categoryId);
-    List<SkillRequest> findByOpenTrue();
 }
