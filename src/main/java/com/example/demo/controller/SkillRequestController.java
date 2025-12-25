@@ -5,45 +5,23 @@ import com.example.demo.service.SkillRequestService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
-@RequestMapping("/api/requests")
+@RequestMapping("/requests")
 public class SkillRequestController {
 
-    private final SkillRequestService requestService;
+    private final SkillRequestService service;
 
-    public SkillRequestController(SkillRequestService requestService) {
-        this.requestService = requestService;
+    public SkillRequestController(SkillRequestService service) {
+        this.service = service;
     }
 
     @PostMapping
-    public ResponseEntity<SkillRequest> createRequest(@RequestBody SkillRequest request) {
-        return ResponseEntity.ok(requestService.createRequest(request));
-    }
-
-    @GetMapping
-    public ResponseEntity<List<SkillRequest>> getAllRequests() {
-        return ResponseEntity.ok(requestService.getAllRequests());
+    public ResponseEntity<SkillRequest> create(@RequestBody SkillRequest request) {
+        return ResponseEntity.ok(service.createRequest(request));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SkillRequest> getRequest(@PathVariable Long id) {
-        return ResponseEntity.ok(requestService.getRequestById(id));
-    }
-
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<SkillRequest>> getByUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(requestService.getRequestsByUser(userId));
-    }
-
-    @GetMapping("/category/{categoryId}")
-    public ResponseEntity<List<SkillRequest>> getByCategory(@PathVariable Long categoryId) {
-        return ResponseEntity.ok(requestService.getRequestsByCategory(categoryId));
-    }
-
-    @GetMapping("/open")
-    public ResponseEntity<List<SkillRequest>> getOpenRequests() {
-        return ResponseEntity.ok(requestService.getOpenRequests());
+    public ResponseEntity<SkillRequest> get(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getRequestById(id));
     }
 }
