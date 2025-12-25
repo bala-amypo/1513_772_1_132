@@ -20,6 +20,5 @@ public class UserProfileServiceImpl implements UserProfileService {
     
     @Override
     public void deactivateUser(Long id) {
-        // Implementation
     }
 }

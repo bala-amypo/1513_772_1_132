@@ -28,7 +28,6 @@ public class SkillServiceImpl implements SkillService {
     
     @Override
     public void deleteSkill(Long id) {
-        // Implementation
     }
     
     @Override
