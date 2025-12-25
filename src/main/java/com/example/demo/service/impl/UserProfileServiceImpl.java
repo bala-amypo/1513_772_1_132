@@ -1,34 +1,33 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.model.UserProfile;
-import com.example.demo.repository.UserProfileRepository;
 import com.example.demo.service.UserProfileService;
 import org.springframework.stereotype.Service;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class UserProfileServiceImpl implements UserProfileService {
 
-    private final UserProfileRepository repo;
-
-    public UserProfileServiceImpl(UserProfileRepository repo) {
-        this.repo = repo;
-    }
+    private final Map<Long, UserProfile> db = new HashMap<>();
+    private long idCounter = 1;
 
     @Override
-    public UserProfile createUser(UserProfile user) {
-        return repo.save(user);
+    public UserProfile createUser(UserProfile profile) {
+        profile.setId(idCounter++);
+        db.put(profile.getId(), profile);
+        return profile;
     }
 
     @Override
     public UserProfile getUserById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new RuntimeException("UserProfile not found"));
+        if (!db.containsKey(id)) throw new RuntimeException("UserProfile not found");
+        return db.get(id);
     }
 
     @Override
     public void deactivateUser(Long id) {
         UserProfile u = getUserById(id);
         u.setActive(false);
-        repo.save(u);
     }
 }

@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/matches")
 public class MatchRecordController {
 
-    private final MatchmakingService service;
+    private final MatchmakingService matchmakingService;
 
-    public MatchRecordController(MatchmakingService service) {
-        this.service = service;
+    public MatchRecordController(MatchmakingService matchmakingService) {
+        this.matchmakingService = matchmakingService;
     }
 
-    @PostMapping("/{requestId}")
-    public ResponseEntity<MatchRecord> generate(@PathVariable Long requestId) {
-        return ResponseEntity.ok(service.generateMatch(requestId));
+    @PostMapping("/{userId}")
+    public ResponseEntity<MatchRecord> generate(@PathVariable Long userId) {
+        return ResponseEntity.ok(matchmakingService.generateMatch(userId));
     }
 }

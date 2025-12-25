@@ -4,6 +4,6 @@ import com.example.demo.model.MatchRecord;
 import java.util.List;
 
 public interface MatchmakingService {
-    MatchRecord generateMatch(Long requestId);
+    MatchRecord generateMatch(Long userId);
     List<MatchRecord> getMatchesForUser(Long userId);
 }
