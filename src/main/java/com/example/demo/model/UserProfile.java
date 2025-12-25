@@ -1,23 +1,24 @@
 package com.example.demo.model;
 
-import jakarta.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.List;
 
-@Entity
 public class UserProfile {
-
-    @Id
-    @GeneratedValue
     private Long id;
-
     private String username;
     private String email;
     private boolean active = true;
-
     private Timestamp createdAt;
     private Timestamp updatedAt;
 
-    // getters & setters
+    // Constructors
+    public UserProfile() {
+        this.createdAt = new Timestamp(System.currentTimeMillis());
+        this.updatedAt = new Timestamp(System.currentTimeMillis());
+    }
+
+    // Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
