@@ -3,42 +3,36 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "skill_requests")
 public class SkillRequest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    private Long userId;
-    private Long categoryId;
-    private boolean open = true;
+    private boolean active = true;
+    private String urgencyLevel;
 
-    public SkillRequest() {}
+    @ManyToOne
+    private UserProfile user;
 
-    public SkillRequest(Long userId, Long categoryId) {
-        this.userId = userId;
-        this.categoryId = categoryId;
-        this.open = true;
+    @ManyToOne
+    private Skill skill;
+
+    // getters & setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
+
+    public String getUrgencyLevel() { return urgencyLevel; }
+    public void setUrgencyLevel(String urgencyLevel) {
+        this.urgencyLevel = urgencyLevel;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public UserProfile getUser() { return user; }
+    public void setUser(UserProfile user) { this.user = user; }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public boolean isOpen() {
-        return open;
-    }
-
-    public void setOpen(boolean open) {
-        this.open = open;
-    }
+    public Skill getSkill() { return skill; }
+    public void setSkill(Skill skill) { this.skill = skill; }
 }

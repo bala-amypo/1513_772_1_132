@@ -3,49 +3,36 @@ package com.example.demo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "skill_offers")
 public class SkillOffer {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    private Long userId;
-    private Long categoryId;
-    private String description;
+    private boolean active = true;
+    private String experienceLevel;
 
-    private boolean available = true;
+    @ManyToOne
+    private UserProfile user;
 
-    public SkillOffer() {}
+    @ManyToOne
+    private Skill skill;
 
-    public SkillOffer(Long userId, Long categoryId, String description) {
-        this.userId = userId;
-        this.categoryId = categoryId;
-        this.description = description;
-        this.available = true;
+    // getters & setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
+
+    public String getExperienceLevel() { return experienceLevel; }
+    public void setExperienceLevel(String experienceLevel) {
+        this.experienceLevel = experienceLevel;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public UserProfile getUser() { return user; }
+    public void setUser(UserProfile user) { this.user = user; }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public boolean isAvailable() {
-        return available;
-    }
-
-    public void setAvailable(boolean available) {
-        this.available = available;
-    }
+    public Skill getSkill() { return skill; }
+    public void setSkill(Skill skill) { this.skill = skill; }
 }
