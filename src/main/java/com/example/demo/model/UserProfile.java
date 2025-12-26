@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -11,16 +10,8 @@ public class UserProfile {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Username is required")
-    @Size(min = 3, max = 50, message = "Username must be 3-50 characters")
-    @Column(unique = true)
     private String username;
-
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
-    @Column(unique = true)
     private String email;
-
     private boolean active = true;
     
     @Column(name = "created_at")
@@ -29,7 +20,6 @@ public class UserProfile {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
     
-    // Keep existing getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     

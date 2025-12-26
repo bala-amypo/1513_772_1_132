@@ -5,7 +5,6 @@ import com.example.demo.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -18,55 +17,28 @@ public class UserProfileController {
     private UserProfileService userProfileService;
     
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody UserProfile user) {
-        try {
-            UserProfile createdUser = userProfileService.createUser(user);
-            return ResponseEntity.ok(createdUser);
-        } catch (RuntimeException e) {
-            Map<String, String> response = new HashMap<>();
-            response.put("error", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
+    public ResponseEntity<UserProfile> create(@RequestBody UserProfile user) {
+        return ResponseEntity.ok(userProfileService.createUser(user));
     }
     
     @GetMapping("/{id}")
-    public ResponseEntity<?> get(@PathVariable Long id) {
-        try {
-            UserProfile user = userProfileService.getUserById(id);
-            return ResponseEntity.ok(user);
-        } catch (RuntimeException e) {
-            Map<String, String> response = new HashMap<>();
-            response.put("error", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
+    public ResponseEntity<UserProfile> get(@PathVariable Long id) {
+        return ResponseEntity.ok(userProfileService.getUserById(id));
     }
     
     @GetMapping
-    public ResponseEntity<?> getAll() {
-        try {
-            List<UserProfile> users = ((com.example.demo.service.impl.UserProfileServiceImpl) userProfileService).getAllUsers();
-            return ResponseEntity.ok(users);
-        } catch (RuntimeException e) {
-            Map<String, String> response = new HashMap<>();
-            response.put("error", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
+    public ResponseEntity<List<UserProfile>> getAll() {
+        return ResponseEntity.ok(((com.example.demo.service.impl.UserProfileServiceImpl) userProfileService).getAllUsers());
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<?> update(@PathVariable Long id, @RequestBody UserProfile user) {
-        try {
-            UserProfile updated = ((com.example.demo.service.impl.UserProfileServiceImpl) userProfileService).updateUser(id, user);
-            return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            Map<String, String> response = new HashMap<>();
-            response.put("error", e.getMessage());
-            return ResponseEntity.badRequest().body(response);
-        }
+    public ResponseEntity<UserProfile> update(@PathVariable Long id, @RequestBody UserProfile user) {
+        UserProfile updated = ((com.example.demo.service.impl.UserProfileServiceImpl) userProfileService).updateUser(id, user);
+        return ResponseEntity.ok(updated);
     }
     
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<?> deactivate(@PathVariable Long id) {
+    public ResponseEntity<Map<String, String>> deactivate(@PathVariable Long id) {
         try {
             userProfileService.deactivateUser(id);
             Map<String, String> response = new HashMap<>();
