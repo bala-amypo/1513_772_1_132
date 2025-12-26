@@ -56,7 +56,5 @@ public class UserProfileServiceImpl implements UserProfileService {
         return userProfileRepository.save(user);
     }
     
-    public void deleteUser(Long id) {
-        userProfileRepository.deleteById(id);
-    }
+    
 }

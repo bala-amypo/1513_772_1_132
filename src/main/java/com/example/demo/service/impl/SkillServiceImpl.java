@@ -38,11 +38,7 @@ public class SkillServiceImpl implements SkillService {
         return skill;
     }
     
-    @Override
-    public void deleteSkill(Long id) {
-        // Implementation for production
-        skillRepository.deleteById(id);
-    }
+    
     
     @Override
     public List<Skill> getAllSkills() {

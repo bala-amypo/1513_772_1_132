@@ -47,7 +47,5 @@ public class SkillRequestServiceImpl implements SkillRequestService {
         return skillRequestRepository.save(request);
     }
     
-    public void deleteRequest(Long id) {
-        skillRequestRepository.deleteById(id);
-    }
+   
 }
