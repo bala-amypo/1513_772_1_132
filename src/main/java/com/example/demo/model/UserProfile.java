@@ -9,8 +9,9 @@ public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+    @NotBlank
     private String username;
+    @NotBlank
     private String email;
     private boolean active = true;
     
