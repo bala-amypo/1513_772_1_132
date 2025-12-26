@@ -4,23 +4,18 @@ import com.example.demo.model.UserProfile;
 import com.example.demo.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-import javax.validation.Valid;
-
 @RestController
 @RequestMapping("/api/user-profiles")
-@Validated  // Add this annotation
 public class UserProfileController {
     
     @Autowired
     private UserProfileService userProfileService;
     
     @PostMapping
-    public ResponseEntity<UserProfile> create(@Valid @RequestBody UserProfile user) {
-        // Add @Valid annotation
+    public ResponseEntity<UserProfile> create(@RequestBody UserProfile user) {
         return ResponseEntity.ok(userProfileService.createUser(user));
     }
     
@@ -35,8 +30,7 @@ public class UserProfileController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<UserProfile> update(@PathVariable Long id, @Valid @RequestBody UserProfile user) {
-        // Add @Valid annotation
+    public ResponseEntity<UserProfile> update(@PathVariable Long id, @RequestBody UserProfile user) {
         UserProfile updated = ((com.example.demo.service.impl.UserProfileServiceImpl) userProfileService).updateUser(id, user);
         return ResponseEntity.ok(updated);
     }
@@ -46,4 +40,6 @@ public class UserProfileController {
         userProfileService.deactivateUser(id);
         return ResponseEntity.ok().build();
     }
+    
+    
 }

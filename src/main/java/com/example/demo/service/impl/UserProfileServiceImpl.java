@@ -4,7 +4,6 @@ import com.example.demo.model.UserProfile;
 import com.example.demo.repository.UserProfileRepository;
 import com.example.demo.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import java.sql.Timestamp;
 import java.util.List;
@@ -18,16 +17,6 @@ public class UserProfileServiceImpl implements UserProfileService {
     
     @Override
     public UserProfile createUser(UserProfile user) {
-        // Check if username already exists
-        if (userProfileRepository.existsByUsername(user.getUsername())) {
-            throw new RuntimeException("Username already exists: " + user.getUsername());
-        }
-        
-        // Check if email already exists
-        if (userProfileRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already exists: " + user.getEmail());
-        }
-        
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         user.setActive(true);
@@ -57,21 +46,6 @@ public class UserProfileServiceImpl implements UserProfileService {
     
     public UserProfile updateUser(Long id, UserProfile userDetails) {
         UserProfile user = getUserById(id);
-        
-        // Check if username is being changed and if it already exists
-        if (userDetails.getUsername() != null && 
-            !userDetails.getUsername().equals(user.getUsername()) &&
-            userProfileRepository.existsByUsername(userDetails.getUsername())) {
-            throw new RuntimeException("Username already exists: " + userDetails.getUsername());
-        }
-        
-        // Check if email is being changed and if it already exists
-        if (userDetails.getEmail() != null && 
-            !userDetails.getEmail().equals(user.getEmail()) &&
-            userProfileRepository.existsByEmail(userDetails.getEmail())) {
-            throw new RuntimeException("Email already exists: " + userDetails.getEmail());
-        }
-        
         if (userDetails.getUsername() != null) {
             user.setUsername(userDetails.getUsername());
         }
@@ -81,4 +55,6 @@ public class UserProfileServiceImpl implements UserProfileService {
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         return userProfileRepository.save(user);
     }
+    
+    
 }
