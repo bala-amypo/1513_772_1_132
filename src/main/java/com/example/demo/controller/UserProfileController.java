@@ -4,9 +4,7 @@ import com.example.demo.model.UserProfile;
 import com.example.demo.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import javax.validation.constraints.*;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.validation.annotation.Validated;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +17,7 @@ public class UserProfileController {
     private UserProfileService userProfileService;
     
     @PostMapping
-    public ResponseEntity<UserProfile> create(@Valid @RequestBody UserProfile user) {
+    public ResponseEntity<UserProfile> create(@RequestBody UserProfile user) {
         return ResponseEntity.ok(userProfileService.createUser(user));
     }
     
