@@ -42,7 +42,7 @@ public class AuthController {
             user.setPassword(request.getPassword());
             user.setRole(request.getRole() != null ? request.getRole() : "USER");
             
-            // Save user (password will be encrypted in UserServiceImpl)
+            // Save user
             AppUser savedUser = userService.save(user);
             
             return ResponseEntity.ok("User registered successfully with email: " + savedUser.getEmail());
@@ -62,11 +62,11 @@ public class AuthController {
             // Generate token
             String token = jwtUtil.generateToken(request.getEmail(), "ADMIN", 1L);
             
+            // Create response with only email and token
             LoginResponse response = new LoginResponse();
             response.setToken(token);
             response.setEmail(request.getEmail());
-            response.setRole("ADMIN");
-            response.setUserId(1L);
+            // Remove setRole and setUserId calls
             
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -74,8 +74,7 @@ public class AuthController {
             LoginResponse response = new LoginResponse();
             response.setToken(jwtUtil.generateToken(request.getEmail(), "ADMIN", 1L));
             response.setEmail(request.getEmail());
-            response.setRole("ADMIN");
-            response.setUserId(1L);
+            // Remove setRole and setUserId calls
             return ResponseEntity.ok(response);
         }
     }
