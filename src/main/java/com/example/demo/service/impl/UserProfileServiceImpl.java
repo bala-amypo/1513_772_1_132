@@ -57,6 +57,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     }
     
     public void deleteUser(Long id) {
-        userProfileRepository.deleteById(id);
+        UserProfile user = getUserById(id);
+        userProfileRepository.delete(user);
     }
 }
