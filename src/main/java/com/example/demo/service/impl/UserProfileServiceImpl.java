@@ -32,13 +32,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         throw new RuntimeException("UserProfile not found with id: " + id);
     }
     
-    @Override
-    public void deactivateUser(Long id) {
-        UserProfile user = getUserById(id);
-        user.setActive(false);
-        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        userProfileRepository.save(user);
-    }
+    
     
     public List<UserProfile> getAllUsers() {
         return userProfileRepository.findAll();
@@ -56,7 +50,5 @@ public class UserProfileServiceImpl implements UserProfileService {
         return userProfileRepository.save(user);
     }
     
-    public void deleteUser(Long id) {
-        userProfileRepository.deleteById(id);
-    }
+    
 }

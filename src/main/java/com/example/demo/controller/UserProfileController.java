@@ -35,15 +35,7 @@ public class UserProfileController {
         return ResponseEntity.ok(updated);
     }
     
-    @PutMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivate(@PathVariable Long id) {
-        userProfileService.deactivateUser(id);
-        return ResponseEntity.ok().build();
-    }
     
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        ((com.example.demo.service.impl.UserProfileServiceImpl) userProfileService).deleteUser(id);
-        return ResponseEntity.ok().build();
-    }
+    
+    
 }
