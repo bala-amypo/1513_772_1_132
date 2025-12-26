@@ -5,7 +5,9 @@ import com.example.demo.service.UserProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/user-profiles")
@@ -36,10 +38,16 @@ public class UserProfileController {
     }
     
     @PutMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivate(@PathVariable Long id) {
-        userProfileService.deactivateUser(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Map<String, String>> deactivate(@PathVariable Long id) {
+        try {
+            userProfileService.deactivateUser(id);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "User deactivated successfully");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            Map<String, String> response = new HashMap<>();
+            response.put("error", e.getMessage());
+            return ResponseEntity.badRequest().body(response);
+        }
     }
-    
-    
 }
