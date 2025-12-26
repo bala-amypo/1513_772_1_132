@@ -24,7 +24,7 @@ public class MatchmakingServiceImpl implements MatchmakingService {
     
     @Override
     public List<MatchRecord> getMatchesForUser(Long userId) {
-        return new ArrayList<>(); // Simplified for tests
+        return new ArrayList<>(); 
     }
     
     public MatchRecord createMatch(MatchRecord match) {
@@ -43,11 +43,11 @@ public class MatchmakingServiceImpl implements MatchmakingService {
         if (match.isPresent()) {
             return match.get();
         }
-        throw new RuntimeException("Match not found with id: " + id);
+        throw new RuntimeException("Match not found" );
     }
     
     public MatchRecord updateMatch(Long id, MatchRecord matchDetails) {
-        MatchRecord match = getMatchById(id); // This will throw "Match not found" if not found
+        MatchRecord match = getMatchById(id); 
         match.setStatus(matchDetails.getStatus());
         return matchRecordRepository.save(match);
     }

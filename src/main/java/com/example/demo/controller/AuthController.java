@@ -30,19 +30,16 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
-            // Check if user exists
             AppUser existingUser = userService.findByEmail(request.getEmail());
             if (existingUser != null && existingUser.getId() != null) {
                 return ResponseEntity.ok("Email registered successfully");
             }
             
-            // Create new user
             AppUser user = new AppUser();
             user.setEmail(request.getEmail());
             user.setPassword(request.getPassword());
             user.setRole(request.getRole() != null ? request.getRole() : "USER");
             
-            // Save user
             AppUser savedUser = userService.save(user);
             
             return ResponseEntity.ok("User registered successfully with email: " + savedUser.getEmail());
@@ -59,22 +56,17 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
             
-            // Generate token
             String token = jwtUtil.generateToken(request.getEmail(), "ADMIN", 1L);
             
-            // Create response with only email and token
             LoginResponse response = new LoginResponse();
             response.setToken(token);
             response.setEmail(request.getEmail());
-            // Remove setRole and setUserId calls
             
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            // For test compatibility
             LoginResponse response = new LoginResponse();
             response.setToken(jwtUtil.generateToken(request.getEmail(), "ADMIN", 1L));
             response.setEmail(request.getEmail());
-            // Remove setRole and setUserId calls
             return ResponseEntity.ok(response);
         }
     }

@@ -39,7 +39,7 @@ public class SkillOfferServiceImpl implements SkillOfferService {
     }
     
     public SkillOffer updateOffer(Long id, SkillOffer offerDetails) {
-        SkillOffer offer = getOfferById(id); // This will throw "Skill offer not found" if not found
+        SkillOffer offer = getOfferById(id); 
         if (offerDetails.getExperienceLevel() != null) {
             offer.setExperienceLevel(offerDetails.getExperienceLevel());
         }
@@ -47,7 +47,7 @@ public class SkillOfferServiceImpl implements SkillOfferService {
     }
     
     public void deactivateOffer(Long id) {
-        SkillOffer offer = getOfferById(id); // This will throw "Skill offer not found" if not found
+        SkillOffer offer = getOfferById(id); 
         offer.setActive(false);
         skillOfferRepository.save(offer);
     }

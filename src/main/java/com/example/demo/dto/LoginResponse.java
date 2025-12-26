@@ -3,10 +3,9 @@ package com.example.demo.dto;
 public class LoginResponse {
     private String email;
     private String token;
-    private String role;  // Add this field
-    private Long userId;  // Add this field
+    private String role;  
+    private Long userId;  
     
-    // Constructors
     public LoginResponse() {}
     
     public LoginResponse(String email, String token) {
@@ -21,7 +20,6 @@ public class LoginResponse {
         this.userId = userId;
     }
     
-    // Getters and setters
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     
