@@ -26,7 +26,7 @@ public class SkillRequestServiceImpl implements SkillRequestService {
         if (request.isPresent()) {
             return request.get();
         }
-        throw new RuntimeException("Skill request not found with id: " + id);
+        throw new RuntimeException("Skill request not found");
     }
     
     @Override
@@ -39,7 +39,7 @@ public class SkillRequestServiceImpl implements SkillRequestService {
     }
     
     public SkillRequest updateRequest(Long id, SkillRequest requestDetails) {
-        SkillRequest request = getRequestById(id); // This will throw "Skill request not found" if not found
+        SkillRequest request = getRequestById(id); 
         if (requestDetails.getUrgencyLevel() != null) {
             request.setUrgencyLevel(requestDetails.getUrgencyLevel());
         }
@@ -47,7 +47,7 @@ public class SkillRequestServiceImpl implements SkillRequestService {
     }
     
     public void deactivateRequest(Long id) {
-        SkillRequest request = getRequestById(id); // This will throw "Skill request not found" if not found
+        SkillRequest request = getRequestById(id); 
         request.setActive(false);
         skillRequestRepository.save(request);
     }

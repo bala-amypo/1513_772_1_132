@@ -14,7 +14,6 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public AppUser findByEmail(String email) {
-        // For backward compatibility
         AppUser user = new AppUser();
         user.setEmail(email);
         user.setRole("ADMIN");
@@ -24,7 +23,6 @@ public class UserServiceImpl implements UserService {
     
     @Override
     public AppUser save(AppUser user) {
-        // Encrypt password before saving
         if (user.getPassword() != null && !user.getPassword().startsWith("$2a$")) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
         }

@@ -26,7 +26,7 @@ public class SkillOfferServiceImpl implements SkillOfferService {
         if (offer.isPresent()) {
             return offer.get();
         }
-        throw new RuntimeException("Skill offer not found with id: " + id);
+        throw new RuntimeException("Skill offer not found");
     }
     
     @Override
