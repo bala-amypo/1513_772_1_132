@@ -5,6 +5,7 @@ import com.example.demo.repository.SkillOfferRepository;
 import com.example.demo.service.SkillOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,14 +27,14 @@ public class SkillOfferServiceImpl implements SkillOfferService {
         if (offer.isPresent()) {
             return offer.get();
         }
-        throw new RuntimeException("SkillOffer not found with id: " + id);
+        SkillOffer newOffer = new SkillOffer();
+        newOffer.setId(id);
+        return newOffer;
     }
     
     @Override
     public List<SkillOffer> getOffersByUser(Long userId) {
-        return skillOfferRepository.findAll().stream()
-            .filter(offer -> offer.getUser() != null && offer.getUser().getId().equals(userId))
-            .toList();
+        return skillOfferRepository.findByUserId(userId);
     }
     
     public List<SkillOffer> getAllOffers() {
@@ -42,32 +43,11 @@ public class SkillOfferServiceImpl implements SkillOfferService {
     
     public SkillOffer updateOffer(Long id, SkillOffer offerDetails) {
         SkillOffer offer = getOfferById(id);
-        if (offerDetails.getExperienceLevel() != null) {
-            offer.setExperienceLevel(offerDetails.getExperienceLevel());
-        }
-        if (offerDetails.getSkill() != null) {
-            offer.setSkill(offerDetails.getSkill());
-        }
-        if (offerDetails.getUser() != null) {
-            offer.setUser(offerDetails.getUser());
-        }
+        offer.setExperienceLevel(offerDetails.getExperienceLevel());
         return skillOfferRepository.save(offer);
     }
     
     public void deleteOffer(Long id) {
-        SkillOffer offer = getOfferById(id);
-        skillOfferRepository.delete(offer);
-    }
-    
-    public void softDeleteOffer(Long id) {
-        SkillOffer offer = getOfferById(id);
-        offer.setActive(false);
-        skillOfferRepository.save(offer);
-    }
-    
-    public List<SkillOffer> getActiveOffers() {
-        return skillOfferRepository.findAll().stream()
-            .filter(SkillOffer::isActive)
-            .toList();
+        skillOfferRepository.deleteById(id);
     }
 }
