@@ -1,29 +1,49 @@
-@DeleteMapping("/{id}")
-public ResponseEntity<?> delete(@PathVariable Long id) {
-    try {
-        ((com.example.demo.service.impl.UserProfileServiceImpl) userProfileService).deleteUser(id);
-        return ResponseEntity.ok(Map.of(
-            "success", true,
-            "message", "User deleted successfully"
-        ));
-    } catch (ResourceNotFoundException e) {
-        throw e; // This will return 404 automatically
-    } catch (OperationException e) {
-        throw new RuntimeException(e.getMessage()); // Keep test compatibility
-    }
-}
+package com.example.demo.controller;
 
-@PutMapping("/{id}/deactivate")
-public ResponseEntity<?> deactivate(@PathVariable Long id) {
-    try {
+import com.example.demo.model.UserProfile;
+import com.example.demo.service.UserProfileService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/user-profiles")
+public class UserProfileController {
+    
+    @Autowired
+    private UserProfileService userProfileService;
+    
+    @PostMapping
+    public ResponseEntity<UserProfile> create(@RequestBody UserProfile user) {
+        return ResponseEntity.ok(userProfileService.createUser(user));
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<UserProfile> get(@PathVariable Long id) {
+        return ResponseEntity.ok(userProfileService.getUserById(id));
+    }
+    
+    @GetMapping
+    public ResponseEntity<List<UserProfile>> getAll() {
+        return ResponseEntity.ok(((com.example.demo.service.impl.UserProfileServiceImpl) userProfileService).getAllUsers());
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<UserProfile> update(@PathVariable Long id, @RequestBody UserProfile user) {
+        UserProfile updated = ((com.example.demo.service.impl.UserProfileServiceImpl) userProfileService).updateUser(id, user);
+        return ResponseEntity.ok(updated);
+    }
+    
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivate(@PathVariable Long id) {
         userProfileService.deactivateUser(id);
-        return ResponseEntity.ok(Map.of(
-            "success", true,
-            "message", "User deactivated successfully"
-        ));
-    } catch (ResourceNotFoundException e) {
-        throw e; // This will return 404 automatically
-    } catch (OperationException e) {
-        throw new RuntimeException(e.getMessage()); // Keep test compatibility
+        return ResponseEntity.ok().build();
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        ((com.example.demo.service.impl.UserProfileServiceImpl) userProfileService).deleteUser(id);
+        return ResponseEntity.ok().build();
     }
 }
