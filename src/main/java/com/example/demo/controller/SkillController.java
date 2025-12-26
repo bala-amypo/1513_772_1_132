@@ -19,8 +19,13 @@ public class SkillController {
         return ResponseEntity.ok(skillService.createSkill(skill));
     }
     
+    @GetMapping
+    public ResponseEntity<List<Skill>> getAll() {
+        return ResponseEntity.ok(skillService.getAllSkills());
+    }
+    
     @GetMapping("/{id}")
-    public ResponseEntity<Skill> get(@PathVariable Long id) {
+    public ResponseEntity<Skill> getById(@PathVariable Long id) {
         return ResponseEntity.ok(skillService.getSkillById(id));
     }
     
@@ -33,10 +38,5 @@ public class SkillController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         skillService.deleteSkill(id);
         return ResponseEntity.ok().build();
-    }
-    
-    @GetMapping
-    public ResponseEntity<List<Skill>> list() {
-        return ResponseEntity.ok(skillService.getAllSkills());
     }
 }
