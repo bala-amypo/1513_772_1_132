@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import javax.persistence.*;
-import javax.validation.constraints.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -10,9 +9,8 @@ public class UserProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
+
     private String username;
-    @NotBlank
     private String email;
     private boolean active = true;
     
