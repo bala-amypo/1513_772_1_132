@@ -1,60 +1,54 @@
-package com.example.demo.service.impl;
+package com.example.demo.controller;
 
 import com.example.demo.model.MatchRecord;
-import com.example.demo.repository.MatchRecordRepository;
 import com.example.demo.service.MatchmakingService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import java.util.ArrayList;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
-import java.util.Optional;
 
-@Service
-public class MatchmakingServiceImpl implements MatchmakingService {
+@RestController
+@RequestMapping("/api/match-records")
+public class MatchRecordController {
     
     @Autowired
-    private MatchRecordRepository matchRecordRepository;
+    private MatchmakingService matchmakingService;
     
-    @Override
-    public MatchRecord generateMatch(Long userId) {
-        MatchRecord match = new MatchRecord();
-        match.setStatus("PENDING");
-        return matchRecordRepository.save(match);
+    @PostMapping
+    public ResponseEntity<MatchRecord> create(@RequestBody MatchRecord match) {
+        return ResponseEntity.ok(((com.example.demo.service.impl.MatchmakingServiceImpl) matchmakingService).createMatch(match));
     }
     
-    @Override
-    public List<MatchRecord> getMatchesForUser(Long userId) {
-        return new ArrayList<>(); // Simplified for tests
+    @GetMapping
+    public ResponseEntity<List<MatchRecord>> getAll() {
+        return ResponseEntity.ok(((com.example.demo.service.impl.MatchmakingServiceImpl) matchmakingService).getAllMatches());
     }
     
-    public MatchRecord createMatch(MatchRecord match) {
-        if (match.getStatus() == null) {
-            match.setStatus("PENDING");
-        }
-        return matchRecordRepository.save(match);
+    @GetMapping("/{id}")
+    public ResponseEntity<MatchRecord> getById(@PathVariable Long id) {
+        MatchRecord match = ((com.example.demo.service.impl.MatchmakingServiceImpl) matchmakingService).getMatchById(id);
+        return ResponseEntity.ok(match);
     }
     
-    public List<MatchRecord> getAllMatches() {
-        return matchRecordRepository.findAll();
+    @PutMapping("/{id}")
+    public ResponseEntity<MatchRecord> update(@PathVariable Long id, @RequestBody MatchRecord matchDetails) {
+        MatchRecord updated = ((com.example.demo.service.impl.MatchmakingServiceImpl) matchmakingService).updateMatch(id, matchDetails);
+        return ResponseEntity.ok(updated);
     }
     
-    public MatchRecord getMatchById(Long id) {
-        Optional<MatchRecord> match = matchRecordRepository.findById(id);
-        if (match.isPresent()) {
-            return match.get();
-        }
-        MatchRecord newMatch = new MatchRecord();
-        newMatch.setId(id);
-        return newMatch;
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        ((com.example.demo.service.impl.MatchmakingServiceImpl) matchmakingService).deleteMatch(id);
+        return ResponseEntity.ok().build();
     }
     
-    public MatchRecord updateMatch(Long id, MatchRecord matchDetails) {
-        MatchRecord match = getMatchById(id);
-        match.setStatus(matchDetails.getStatus());
-        return matchRecordRepository.save(match);
+    @PostMapping("/generate/{userId}")
+    public ResponseEntity<MatchRecord> generate(@PathVariable Long userId) {
+        return ResponseEntity.ok(matchmakingService.generateMatch(userId));
     }
     
-    public void deleteMatch(Long id) {
-        matchRecordRepository.deleteById(id);
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<MatchRecord>> getForUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(matchmakingService.getMatchesForUser(userId));
     }
 }

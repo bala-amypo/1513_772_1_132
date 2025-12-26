@@ -14,19 +14,9 @@ public class MatchRecordController {
     @Autowired
     private MatchmakingService matchmakingService;
     
-    @PostMapping("/generate/{userId}")
-    public ResponseEntity<MatchRecord> generate(@PathVariable Long userId) {
-        return ResponseEntity.ok(matchmakingService.generateMatch(userId));
-    }
-    
     @PostMapping
     public ResponseEntity<MatchRecord> create(@RequestBody MatchRecord match) {
         return ResponseEntity.ok(((com.example.demo.service.impl.MatchmakingServiceImpl) matchmakingService).createMatch(match));
-    }
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<MatchRecord> get(@PathVariable Long id) {
-        return ResponseEntity.ok(((com.example.demo.service.impl.MatchmakingServiceImpl) matchmakingService).getMatchById(id));
     }
     
     @GetMapping
@@ -34,14 +24,15 @@ public class MatchRecordController {
         return ResponseEntity.ok(((com.example.demo.service.impl.MatchmakingServiceImpl) matchmakingService).getAllMatches());
     }
     
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<MatchRecord>> getForUser(@PathVariable Long userId) {
-        return ResponseEntity.ok(matchmakingService.getMatchesForUser(userId));
+    @GetMapping("/{id}")
+    public ResponseEntity<MatchRecord> getById(@PathVariable Long id) {
+        MatchRecord match = ((com.example.demo.service.impl.MatchmakingServiceImpl) matchmakingService).getMatchById(id);
+        return ResponseEntity.ok(match);
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<MatchRecord> update(@PathVariable Long id, @RequestBody MatchRecord match) {
-        MatchRecord updated = ((com.example.demo.service.impl.MatchmakingServiceImpl) matchmakingService).updateMatch(id, match);
+    public ResponseEntity<MatchRecord> update(@PathVariable Long id, @RequestBody MatchRecord matchDetails) {
+        MatchRecord updated = ((com.example.demo.service.impl.MatchmakingServiceImpl) matchmakingService).updateMatch(id, matchDetails);
         return ResponseEntity.ok(updated);
     }
     
@@ -49,5 +40,15 @@ public class MatchRecordController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         ((com.example.demo.service.impl.MatchmakingServiceImpl) matchmakingService).deleteMatch(id);
         return ResponseEntity.ok().build();
+    }
+    
+    @PostMapping("/generate/{userId}")
+    public ResponseEntity<MatchRecord> generate(@PathVariable Long userId) {
+        return ResponseEntity.ok(matchmakingService.generateMatch(userId));
+    }
+    
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<MatchRecord>> getForUser(@PathVariable Long userId) {
+        return ResponseEntity.ok(matchmakingService.getMatchesForUser(userId));
     }
 }

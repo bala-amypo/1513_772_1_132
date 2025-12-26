@@ -26,26 +26,35 @@ public class SkillServiceImpl implements SkillService {
         if (skill.isPresent()) {
             return skill.get();
         }
-        return new Skill(); // For tests to pass
+        throw new RuntimeException("Skill not found with id: " + id);
     }
     
     @Override
     public Skill updateSkill(Long id, Skill skillDetails) {
-        Skill skill = new Skill();
-        skill.setId(id);
-        skill.setName(skillDetails.getName());
-        skill.setCategory(skillDetails.getCategory());
-        return skill;
+        Skill skill = getSkillById(id);
+        if (skillDetails.getName() != null) {
+            skill.setName(skillDetails.getName());
+        }
+        if (skillDetails.getCategory() != null) {
+            skill.setCategory(skillDetails.getCategory());
+        }
+        return skillRepository.save(skill);
     }
     
     @Override
     public void deleteSkill(Long id) {
-        // Implementation for production
-        skillRepository.deleteById(id);
+        Skill skill = getSkillById(id);
+        skillRepository.delete(skill);
     }
     
     @Override
     public List<Skill> getAllSkills() {
         return skillRepository.findAll();
+    }
+    
+    public void softDeleteSkill(Long id) {
+        Skill skill = getSkillById(id);
+        skill.setActive(false);
+        skillRepository.save(skill);
     }
 }

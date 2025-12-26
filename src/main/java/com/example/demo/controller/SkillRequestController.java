@@ -19,14 +19,14 @@ public class SkillRequestController {
         return ResponseEntity.ok(skillRequestService.createRequest(request));
     }
     
-    @GetMapping("/{id}")
-    public ResponseEntity<SkillRequest> get(@PathVariable Long id) {
-        return ResponseEntity.ok(skillRequestService.getRequestById(id));
-    }
-    
     @GetMapping
     public ResponseEntity<List<SkillRequest>> getAll() {
         return ResponseEntity.ok(((com.example.demo.service.impl.SkillRequestServiceImpl) skillRequestService).getAllRequests());
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<SkillRequest> getById(@PathVariable Long id) {
+        return ResponseEntity.ok(skillRequestService.getRequestById(id));
     }
     
     @GetMapping("/user/{userId}")
