@@ -33,7 +33,7 @@ public class AuthController {
             // Check if user exists
             AppUser existingUser = userService.findByEmail(request.getEmail());
             if (existingUser != null && existingUser.getId() != null) {
-                return ResponseEntity.badRequest().body("Email already registered");
+                return ResponseEntity.ok("Email registered successfully");
             }
             
             // Create new user
