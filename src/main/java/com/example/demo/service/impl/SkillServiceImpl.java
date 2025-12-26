@@ -26,7 +26,7 @@ public class SkillServiceImpl implements SkillService {
         if (skill.isPresent()) {
             return skill.get();
         }
-        return new Skill(); // For tests to pass
+        throw new RuntimeException("Skill not found");
     }
     
     @Override

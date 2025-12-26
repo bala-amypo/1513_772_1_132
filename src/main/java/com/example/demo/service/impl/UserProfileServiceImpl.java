@@ -29,7 +29,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         if (user.isPresent()) {
             return user.get();
         }
-        throw new RuntimeException("UserProfile not found with id: " + id);
+        throw new RuntimeException("User not found");
     }
     
     @Override
