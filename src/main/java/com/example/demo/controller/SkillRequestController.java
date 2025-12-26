@@ -40,5 +40,5 @@ public class SkillRequestController {
         return ResponseEntity.ok(updated);
     }
     
-    
+    z
 }

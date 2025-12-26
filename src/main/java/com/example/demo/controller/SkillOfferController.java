@@ -40,5 +40,9 @@ public class SkillOfferController {
         return ResponseEntity.ok(updated);
     }
     
-    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        ((com.example.demo.service.impl.SkillOfferServiceImpl) skillOfferService).deleteOffer(id);
+        return ResponseEntity.ok().build();
+    }
 }

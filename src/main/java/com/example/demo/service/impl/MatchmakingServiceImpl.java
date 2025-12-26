@@ -54,5 +54,7 @@ public class MatchmakingServiceImpl implements MatchmakingService {
         return matchRecordRepository.save(match);
     }
     
-    
+    public void deleteMatch(Long id) {
+        matchRecordRepository.deleteById(id);
+    }
 }

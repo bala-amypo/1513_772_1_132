@@ -7,5 +7,6 @@ public interface SkillService {
     Skill createSkill(Skill skill);
     Skill getSkillById(Long id);
     Skill updateSkill(Long id, Skill skill);
+    void deleteSkill(Long id);
     List<Skill> getAllSkills();
 }

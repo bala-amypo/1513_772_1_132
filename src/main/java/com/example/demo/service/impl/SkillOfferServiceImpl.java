@@ -47,5 +47,7 @@ public class SkillOfferServiceImpl implements SkillOfferService {
         return skillOfferRepository.save(offer);
     }
     
-    
+    public void deleteOffer(Long id) {
+        skillOfferRepository.deleteById(id);
+    }
 }
