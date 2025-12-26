@@ -3,13 +3,12 @@ package com.example.demo.controller;
 import com.example.demo.model.SkillRequest;
 import com.example.demo.service.SkillRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/requests")
+@RequestMapping("/api/skill-requests")
 public class SkillRequestController {
     
     @Autowired
@@ -17,43 +16,33 @@ public class SkillRequestController {
     
     @PostMapping
     public ResponseEntity<SkillRequest> create(@RequestBody SkillRequest request) {
-        SkillRequest createdRequest = skillRequestService.createRequest(request);
-        return new ResponseEntity<>(createdRequest, HttpStatus.CREATED);
+        return ResponseEntity.ok(skillRequestService.createRequest(request));
     }
     
     @GetMapping("/{id}")
     public ResponseEntity<SkillRequest> get(@PathVariable Long id) {
-        SkillRequest request = skillRequestService.getRequestById(id);
-        return ResponseEntity.ok(request);
-    }
-    
-    @PutMapping("/{id}")
-    public ResponseEntity<SkillRequest> update(@PathVariable Long id, @RequestBody SkillRequest requestDetails) {
-        SkillRequest updatedRequest = skillRequestService.updateRequest(id, requestDetails);
-        return ResponseEntity.ok(updatedRequest);
-    }
-    
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        skillRequestService.deleteRequest(id);
-        return ResponseEntity.noContent().build();
-    }
-    
-    @PostMapping("/{id}/deactivate")
-    public ResponseEntity<Void> deactivate(@PathVariable Long id) {
-        skillRequestService.deactivateRequest(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(skillRequestService.getRequestById(id));
     }
     
     @GetMapping
-    public ResponseEntity<List<SkillRequest>> list() {
-        List<SkillRequest> requests = skillRequestService.getAllRequests();
-        return ResponseEntity.ok(requests);
+    public ResponseEntity<List<SkillRequest>> getAll() {
+        return ResponseEntity.ok(((com.example.demo.service.impl.SkillRequestServiceImpl) skillRequestService).getAllRequests());
     }
     
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<SkillRequest>> getByUser(@PathVariable Long userId) {
-        List<SkillRequest> requests = skillRequestService.getRequestsByUser(userId);
-        return ResponseEntity.ok(requests);
+        return ResponseEntity.ok(skillRequestService.getRequestsByUser(userId));
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<SkillRequest> update(@PathVariable Long id, @RequestBody SkillRequest request) {
+        SkillRequest updated = ((com.example.demo.service.impl.SkillRequestServiceImpl) skillRequestService).updateRequest(id, request);
+        return ResponseEntity.ok(updated);
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        ((com.example.demo.service.impl.SkillRequestServiceImpl) skillRequestService).deleteRequest(id);
+        return ResponseEntity.ok().build();
     }
 }
