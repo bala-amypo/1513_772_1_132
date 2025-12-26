@@ -1,6 +1,7 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.*;
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.exception.OperationException;
 import com.example.demo.model.SkillOffer;
 import com.example.demo.repository.SkillOfferRepository;
 import com.example.demo.service.SkillOfferService;
@@ -17,15 +18,14 @@ public class SkillOfferServiceImpl implements SkillOfferService {
     
     @Override
     public SkillOffer createOffer(SkillOffer offer) {
-        // Validate required fields
-        if (offer.getUser() == null || offer.getUser().getId() == null) {
-            throw new ValidationException("User is required for skill offer");
+        if (offer.getUser() == null) {
+            throw new OperationException("User is required for skill offer");
         }
-        if (offer.getSkill() == null || offer.getSkill().getId() == null) {
-            throw new ValidationException("Skill is required for skill offer");
+        if (offer.getSkill() == null) {
+            throw new OperationException("Skill is required for skill offer");
         }
         if (offer.getExperienceLevel() == null || offer.getExperienceLevel().trim().isEmpty()) {
-            throw new ValidationException("Experience level is required");
+            throw new OperationException("Experience level is required");
         }
         
         offer.setActive(true);
@@ -36,9 +36,6 @@ public class SkillOfferServiceImpl implements SkillOfferService {
     public SkillOffer getOfferById(Long id) {
         Optional<SkillOffer> offer = skillOfferRepository.findById(id);
         if (offer.isPresent()) {
-            if (!offer.get().isActive()) {
-                throw new ResourceInactiveException("SkillOffer with ID " + id + " is deactivated");
-            }
             return offer.get();
         }
         throw new ResourceNotFoundException("SkillOffer not found with id: " + id);
@@ -46,52 +43,51 @@ public class SkillOfferServiceImpl implements SkillOfferService {
     
     @Override
     public List<SkillOffer> getOffersByUser(Long userId) {
-        return skillOfferRepository.findByUserId(userId).stream()
-            .filter(SkillOffer::isActive)
-            .toList();
+        return skillOfferRepository.findByUserId(userId);
     }
     
-    public List<SkillOffer> getAllOffers() {
-        return skillOfferRepository.findAll();
-    }
-    
-    public List<SkillOffer> getActiveOffers() {
-        return skillOfferRepository.findAll().stream()
-            .filter(SkillOffer::isActive)
-            .toList();
-    }
-    
+    @Override
     public SkillOffer updateOffer(Long id, SkillOffer offerDetails) {
         SkillOffer offer = skillOfferRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("SkillOffer not found with id: " + id));
             
         if (!offer.isActive()) {
-            throw new ResourceInactiveException("Cannot update deactivated skill offer with ID " + id);
+            throw new OperationException("Cannot update deactivated skill offer with ID " + id);
         }
         
         if (offerDetails.getExperienceLevel() != null) {
             offer.setExperienceLevel(offerDetails.getExperienceLevel());
         }
-        
         return skillOfferRepository.save(offer);
     }
     
+    @Override
     public void deleteOffer(Long id) {
         SkillOffer offer = skillOfferRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("SkillOffer not found with id: " + id));
         
+        if (!offer.isActive()) {
+            throw new OperationException("Cannot delete deactivated offer. Deactivate first.");
+        }
+        
         skillOfferRepository.delete(offer);
     }
     
+    @Override
     public void deactivateOffer(Long id) {
         SkillOffer offer = skillOfferRepository.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("SkillOffer not found with id: " + id));
             
         if (!offer.isActive()) {
-            throw new ResourceInactiveException("SkillOffer with ID " + id + " is already deactivated");
+            throw new OperationException("SkillOffer with ID " + id + " is already deactivated");
         }
         
         offer.setActive(false);
         skillOfferRepository.save(offer);
+    }
+    
+    @Override
+    public List<SkillOffer> getAllOffers() {
+        return skillOfferRepository.findAll();
     }
 }
