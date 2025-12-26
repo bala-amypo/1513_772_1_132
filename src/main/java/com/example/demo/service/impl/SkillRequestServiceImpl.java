@@ -5,7 +5,6 @@ import com.example.demo.repository.SkillRequestRepository;
 import com.example.demo.service.SkillRequestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,14 +26,12 @@ public class SkillRequestServiceImpl implements SkillRequestService {
         if (request.isPresent()) {
             return request.get();
         }
-        SkillRequest newRequest = new SkillRequest();
-        newRequest.setId(id);
-        return newRequest;
+        throw new RuntimeException("Skill request not found with id: " + id);
     }
     
     @Override
     public List<SkillRequest> getRequestsByUser(Long userId) {
-        return new ArrayList<>(); // Simplified for tests
+        return skillRequestRepository.findByUserId(userId);
     }
     
     public List<SkillRequest> getAllRequests() {
@@ -42,10 +39,16 @@ public class SkillRequestServiceImpl implements SkillRequestService {
     }
     
     public SkillRequest updateRequest(Long id, SkillRequest requestDetails) {
-        SkillRequest request = getRequestById(id);
-        request.setUrgencyLevel(requestDetails.getUrgencyLevel());
+        SkillRequest request = getRequestById(id); // This will throw "Skill request not found" if not found
+        if (requestDetails.getUrgencyLevel() != null) {
+            request.setUrgencyLevel(requestDetails.getUrgencyLevel());
+        }
         return skillRequestRepository.save(request);
     }
     
-   
+    public void deactivateRequest(Long id) {
+        SkillRequest request = getRequestById(id); // This will throw "Skill request not found" if not found
+        request.setActive(false);
+        skillRequestRepository.save(request);
+    }
 }

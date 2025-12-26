@@ -5,7 +5,6 @@ import com.example.demo.repository.SkillOfferRepository;
 import com.example.demo.service.SkillOfferService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,9 +26,7 @@ public class SkillOfferServiceImpl implements SkillOfferService {
         if (offer.isPresent()) {
             return offer.get();
         }
-        SkillOffer newOffer = new SkillOffer();
-        newOffer.setId(id);
-        return newOffer;
+        throw new RuntimeException("Skill offer not found with id: " + id);
     }
     
     @Override
@@ -42,10 +39,16 @@ public class SkillOfferServiceImpl implements SkillOfferService {
     }
     
     public SkillOffer updateOffer(Long id, SkillOffer offerDetails) {
-        SkillOffer offer = getOfferById(id);
-        offer.setExperienceLevel(offerDetails.getExperienceLevel());
+        SkillOffer offer = getOfferById(id); // This will throw "Skill offer not found" if not found
+        if (offerDetails.getExperienceLevel() != null) {
+            offer.setExperienceLevel(offerDetails.getExperienceLevel());
+        }
         return skillOfferRepository.save(offer);
     }
     
-    
+    public void deactivateOffer(Long id) {
+        SkillOffer offer = getOfferById(id); // This will throw "Skill offer not found" if not found
+        offer.setActive(false);
+        skillOfferRepository.save(offer);
+    }
 }
