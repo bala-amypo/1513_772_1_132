@@ -1,6 +1,5 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.exception.*;
 import com.example.demo.model.UserProfile;
 import com.example.demo.repository.UserProfileRepository;
 import com.example.demo.service.UserProfileService;
@@ -12,29 +11,106 @@ import java.util.Optional;
 
 @Service
 public class UserProfileServiceImpl implements UserProfileService {
+    package com.example.demo.service.impl;
+
+import com.example.demo.exception.ResourceNotFoundException;
+import com.example.demo.exception.OperationException;
+import com.example.demo.model.Skill;
+import com.example.demo.repository.SkillRepository;
+import com.example.demo.service.SkillService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Optional;
+
+@Service
+public class SkillServiceImpl implements SkillService {
     
+    @Autowired
+    private SkillRepository skillRepository;
+    
+    @Override
+    public Skill createSkill(Skill skill) {
+        if (skill.getName() == null || skill.getName().trim().isEmpty()) {
+            throw new OperationException("Skill name is required");
+        }
+        
+        if (skillRepository.findByName(skill.getName()) != null) {
+            throw new OperationException("Skill with name '" + skill.getName() + "' already exists");
+        }
+        
+        skill.setActive(true);
+        return skillRepository.save(skill);
+    }
+    
+    @Override
+    public Skill getSkillById(Long id) {
+        Optional<Skill> skill = skillRepository.findById(id);
+        if (skill.isPresent()) {
+            return skill.get();
+        }
+        throw new ResourceNotFoundException("Skill not found with id: " + id);
+    }
+    
+    @Override
+    public Skill updateSkill(Long id, Skill skillDetails) {
+        Skill skill = skillRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Skill not found with id: " + id));
+            
+        if (!skill.isActive()) {
+            throw new OperationException("Cannot update deactivated skill with ID " + id);
+        }
+        
+        if (skillDetails.getName() != null && !skillDetails.getName().trim().isEmpty()) {
+            Skill existingSkill = skillRepository.findByName(skillDetails.getName());
+            if (existingSkill != null && !existingSkill.getId().equals(id)) {
+                throw new OperationException("Skill with name '" + skillDetails.getName() + "' already exists");
+            }
+            skill.setName(skillDetails.getName());
+        }
+        
+        if (skillDetails.getCategory() != null) {
+            skill.setCategory(skillDetails.getCategory());
+        }
+        
+        return skillRepository.save(skill);
+    }
+    
+    @Override
+    public void deleteSkill(Long id) {
+        Skill skill = skillRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Skill not found with id: " + id));
+        
+        if (!skill.isActive()) {
+            throw new OperationException("Cannot delete deactivated skill. Deactivate first.");
+        }
+        
+        skillRepository.delete(skill);
+    }
+    
+    @Override
+    public void deactivateSkill(Long id) {
+        Skill skill = skillRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Skill not found with id: " + id));
+            
+        if (!skill.isActive()) {
+            throw new OperationException("Skill with ID " + id + " is already deactivated");
+        }
+        
+        skill.setActive(false);
+        skillRepository.save(skill);
+    }
+    
+    @Override
+    public List<Skill> getAllSkills() {
+        return skillRepository.findAll();
+    }
+}
     @Autowired
     private UserProfileRepository userProfileRepository;
     
     @Override
     public UserProfile createUser(UserProfile user) {
-        // Check if email already exists
-        Optional<UserProfile> existingUser = userProfileRepository.findAll().stream()
-            .filter(u -> user.getEmail() != null && user.getEmail().equals(u.getEmail()))
-            .findFirst();
-            
-        if (existingUser.isPresent()) {
-            throw new ResourceAlreadyExistsException("User with email " + user.getEmail() + " already exists");
-        }
-        
-        // Validate required fields
-        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
-            throw new ValidationException("Username is required");
-        }
-        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
-            throw new ValidationException("Email is required");
-        }
-        
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         user.setActive(true);
@@ -45,23 +121,14 @@ public class UserProfileServiceImpl implements UserProfileService {
     public UserProfile getUserById(Long id) {
         Optional<UserProfile> user = userProfileRepository.findById(id);
         if (user.isPresent()) {
-            if (!user.get().isActive()) {
-                throw new ResourceInactiveException("User with ID " + id + " is deactivated");
-            }
             return user.get();
         }
-        throw new ResourceNotFoundException("UserProfile not found with id: " + id);
+        throw new RuntimeException("UserProfile not found with id: " + id);
     }
     
     @Override
     public void deactivateUser(Long id) {
-        UserProfile user = userProfileRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("UserProfile not found with id: " + id));
-            
-        if (!user.isActive()) {
-            throw new ResourceInactiveException("User with ID " + id + " is already deactivated");
-        }
-        
+        UserProfile user = getUserById(id);
         user.setActive(false);
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         userProfileRepository.save(user);
@@ -71,46 +138,19 @@ public class UserProfileServiceImpl implements UserProfileService {
         return userProfileRepository.findAll();
     }
     
-    public List<UserProfile> getActiveUsers() {
-        return userProfileRepository.findAll().stream()
-            .filter(UserProfile::isActive)
-            .toList();
-    }
-    
     public UserProfile updateUser(Long id, UserProfile userDetails) {
-        UserProfile user = userProfileRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("UserProfile not found with id: " + id));
-            
-        if (!user.isActive()) {
-            throw new ResourceInactiveException("Cannot update deactivated user with ID " + id);
-        }
-        
-        if (userDetails.getUsername() != null && !userDetails.getUsername().trim().isEmpty()) {
+        UserProfile user = getUserById(id);
+        if (userDetails.getUsername() != null) {
             user.setUsername(userDetails.getUsername());
         }
-        
-        if (userDetails.getEmail() != null && !userDetails.getEmail().trim().isEmpty()) {
-            // Check if email is being changed to an existing email
-            if (!user.getEmail().equals(userDetails.getEmail())) {
-                Optional<UserProfile> existingUser = userProfileRepository.findAll().stream()
-                    .filter(u -> userDetails.getEmail().equals(u.getEmail()))
-                    .findFirst();
-                    
-                if (existingUser.isPresent()) {
-                    throw new ResourceAlreadyExistsException("Email " + userDetails.getEmail() + " already exists");
-                }
-                user.setEmail(userDetails.getEmail());
-            }
+        if (userDetails.getEmail() != null) {
+            user.setEmail(userDetails.getEmail());
         }
-        
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         return userProfileRepository.save(user);
     }
     
     public void deleteUser(Long id) {
-        UserProfile user = userProfileRepository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("UserProfile not found with id: " + id));
-        
-        userProfileRepository.delete(user);
+        userProfileRepository.deleteById(id);
     }
 }
