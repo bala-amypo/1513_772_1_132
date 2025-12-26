@@ -19,14 +19,14 @@ public class UserProfileController {
         return ResponseEntity.ok(userProfileService.createUser(user));
     }
     
+    @GetMapping("/{id}")
+    public ResponseEntity<UserProfile> get(@PathVariable Long id) {
+        return ResponseEntity.ok(userProfileService.getUserById(id));
+    }
+    
     @GetMapping
     public ResponseEntity<List<UserProfile>> getAll() {
         return ResponseEntity.ok(((com.example.demo.service.impl.UserProfileServiceImpl) userProfileService).getAllUsers());
-    }
-    
-    @GetMapping("/{id}")
-    public ResponseEntity<UserProfile> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(userProfileService.getUserById(id));
     }
     
     @PutMapping("/{id}")
@@ -35,9 +35,15 @@ public class UserProfileController {
         return ResponseEntity.ok(updated);
     }
     
+    @PutMapping("/{id}/deactivate")
+    public ResponseEntity<Void> deactivate(@PathVariable Long id) {
+        userProfileService.deactivateUser(id);
+        return ResponseEntity.ok().build();
+    }
+    
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        userProfileService.deactivateUser(id);
+        ((com.example.demo.service.impl.UserProfileServiceImpl) userProfileService).deleteUser(id);
         return ResponseEntity.ok().build();
     }
 }

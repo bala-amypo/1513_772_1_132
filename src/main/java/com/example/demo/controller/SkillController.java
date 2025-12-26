@@ -19,14 +19,14 @@ public class SkillController {
         return ResponseEntity.ok(skillService.createSkill(skill));
     }
     
-    @GetMapping
-    public ResponseEntity<List<Skill>> getAll() {
-        return ResponseEntity.ok(skillService.getAllSkills());
+    @GetMapping("/{id}")
+    public ResponseEntity<Skill> get(@PathVariable Long id) {
+        return ResponseEntity.ok(skillService.getSkillById(id));
     }
     
-    @GetMapping("/{id}")
-    public ResponseEntity<Skill> getById(@PathVariable Long id) {
-        return ResponseEntity.ok(skillService.getSkillById(id));
+    @GetMapping
+    public ResponseEntity<List<Skill>> list() {
+        return ResponseEntity.ok(skillService.getAllSkills());
     }
     
     @PutMapping("/{id}")
