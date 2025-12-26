@@ -43,13 +43,11 @@ public class MatchmakingServiceImpl implements MatchmakingService {
         if (match.isPresent()) {
             return match.get();
         }
-        MatchRecord newMatch = new MatchRecord();
-        newMatch.setId(id);
-        return newMatch;
+        throw new RuntimeException("Match not found with id: " + id);
     }
     
     public MatchRecord updateMatch(Long id, MatchRecord matchDetails) {
-        MatchRecord match = getMatchById(id);
+        MatchRecord match = getMatchById(id); // This will throw "Match not found" if not found
         match.setStatus(matchDetails.getStatus());
         return matchRecordRepository.save(match);
     }
