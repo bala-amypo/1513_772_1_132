@@ -26,19 +26,23 @@ public class SkillServiceImpl implements SkillService {
         if (skill.isPresent()) {
             return skill.get();
         }
-        throw new RuntimeException("Skill not found");
+        throw new RuntimeException("Skill not found with id: " + id);
     }
     
     @Override
     public Skill updateSkill(Long id, Skill skillDetails) {
-        Skill skill = new Skill();
-        skill.setId(id);
+        Skill skill = getSkillById(id); // This will throw "Skill not found" if not found
         skill.setName(skillDetails.getName());
         skill.setCategory(skillDetails.getCategory());
-        return skill;
+        return skillRepository.save(skill);
     }
     
-    
+    @Override
+    public void deactivateSkill(Long id) {
+        Skill skill = getSkillById(id); // This will throw "Skill not found" if not found
+        skill.setActive(false);
+        skillRepository.save(skill);
+    }
     
     @Override
     public List<Skill> getAllSkills() {
