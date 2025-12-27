@@ -29,16 +29,8 @@ public class UserProfileServiceImpl implements UserProfileService {
     public UserProfile getUserById(Long id) {
         return userProfileRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found  " )
+                        new ResourceNotFoundException("User not found with id: " + id)
                 );
-    }
-
-    @Override
-    public void deactivateUser(Long id) {
-        UserProfile user = getUserById(id);
-        user.setActive(false);
-        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        userProfileRepository.save(user);
     }
 
     @Override
@@ -57,5 +49,13 @@ public class UserProfileServiceImpl implements UserProfileService {
         }
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         return userProfileRepository.save(user);
+    }
+
+    @Override
+    public void deactivateUser(Long id) {
+        UserProfile user = getUserById(id);
+        user.setActive(false);
+        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        userProfileRepository.save(user);
     }
 }
