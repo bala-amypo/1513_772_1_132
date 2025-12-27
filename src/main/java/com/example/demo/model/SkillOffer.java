@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "skill_offers")
@@ -9,15 +10,21 @@ public class SkillOffer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @NotNull(message = "User is required")
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserProfile user;
     
+    @NotNull(message = "Skill is required")
     @ManyToOne
     @JoinColumn(name = "skill_id")
     private Skill skill;
     
+    @NotBlank(message = "Experience level is required")
+    @Pattern(regexp = "^(BEGINNER|INTERMEDIATE|ADVANCED|EXPERT)$", 
+             message = "Experience level must be BEGINNER, INTERMEDIATE, ADVANCED, or EXPERT")
     private String experienceLevel;
+    
     private boolean active = true;
     
     public Long getId() { return id; }
