@@ -45,7 +45,7 @@ public class MatchmakingServiceImpl implements MatchmakingService {
         return matchRecordRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "Match not found with id: " + id
+                        "Match not found " 
                 ));
     }
 
