@@ -36,31 +36,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            // Allow access to documentation and public endpoints
             .antMatchers("/", "/error", "/favicon.ico", "/api-docs-url").permitAll()
             .antMatchers("/h2-console/**").permitAll()
             .antMatchers("/api/auth/**").permitAll()
-            // Allow all Swagger/OpenAPI endpoints
             .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/v2/api-docs",
                     "/v3/api-docs", "/v3/api-docs/**", "/api-docs", "/api-docs/**",
                     "/webjars/**", "/configuration/**").permitAll()
-            // User endpoints
             .antMatchers(HttpMethod.GET, "/api/user-profiles/**").hasAnyRole("USER", "ADMIN")
             .antMatchers(HttpMethod.POST, "/api/user-profiles/**").hasRole("ADMIN")
             .antMatchers(HttpMethod.PUT, "/api/user-profiles/**").hasRole("ADMIN")
-            // Skill endpoints
             .antMatchers(HttpMethod.GET, "/api/skills/**").hasAnyRole("USER", "ADMIN")
             .antMatchers(HttpMethod.POST, "/api/skills/**").hasRole("ADMIN")
             .antMatchers(HttpMethod.PUT, "/api/skills/**").hasRole("ADMIN")
-            // Skill Request endpoints
             .antMatchers(HttpMethod.GET, "/api/skill-requests/**").hasAnyRole("USER", "ADMIN")
             .antMatchers(HttpMethod.POST, "/api/skill-requests/**").hasAnyRole("USER", "ADMIN")
             .antMatchers(HttpMethod.PUT, "/api/skill-requests/**").hasAnyRole("USER", "ADMIN")
-            // Skill Offer endpoints
             .antMatchers(HttpMethod.GET, "/api/skill-offers/**").hasAnyRole("USER", "ADMIN")
             .antMatchers(HttpMethod.POST, "/api/skill-offers/**").hasAnyRole("USER", "ADMIN")
             .antMatchers(HttpMethod.PUT, "/api/skill-offers/**").hasAnyRole("USER", "ADMIN")
-            // Match endpoints
             .antMatchers(HttpMethod.GET, "/api/match-records/**").hasAnyRole("USER", "ADMIN")
             .antMatchers(HttpMethod.POST, "/api/match-records/**").hasRole("ADMIN")
             .antMatchers(HttpMethod.PUT, "/api/match-records/**").hasRole("ADMIN")
