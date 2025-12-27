@@ -39,9 +39,8 @@ public class AuthController {
     private UserService userService;
     
     @Autowired
-    private UserRepository userRepository;  // Add this
+    private UserRepository userRepository;  
     
-    // Add this endpoint to check existing users
     @GetMapping("/check-users")
     @Operation(summary = "Check existing users (for debugging)")
     public ResponseEntity<List<AppUser>> checkUsers() {
@@ -53,7 +52,6 @@ public class AuthController {
     @Operation(summary = "Register a new user")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         try {
-            // Create new user
             AppUser user = new AppUser();
             user.setEmail(request.getEmail());
             user.setPassword(request.getPassword());
@@ -62,7 +60,6 @@ public class AuthController {
             
             AppUser savedUser = userService.save(user);
             
-            // Generate token for immediate login
             String token = jwtUtil.generateToken(savedUser.getEmail(), savedUser.getRole(), savedUser.getId());
             
             LoginResponse response = new LoginResponse();
@@ -88,10 +85,8 @@ public class AuthController {
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
             
-            // Get user details
             AppUser user = userService.findByEmail(request.getEmail());
             
-            // Generate token
             String token = jwtUtil.generateToken(user.getEmail(), user.getRole(), user.getId());
             
             LoginResponse response = new LoginResponse();
