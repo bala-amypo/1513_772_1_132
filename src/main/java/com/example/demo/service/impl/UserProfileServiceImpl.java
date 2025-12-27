@@ -31,7 +31,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         return userProfileRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "User not found with id: " + id
+                        "User not found  " 
                 ));
     }
 
