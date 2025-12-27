@@ -19,6 +19,13 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public UserProfile createUser(UserProfile user) {
+        if (user.getUsername() == null || user.getUsername().trim().isEmpty()) {
+            throw new IllegalArgumentException("Username cannot be null or empty");
+        }
+        if (user.getEmail() == null || user.getEmail().trim().isEmpty()) {
+            throw new IllegalArgumentException("Email cannot be null or empty");
+        }
+        
         user.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         user.setActive(true);
@@ -27,9 +34,12 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public UserProfile getUserById(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Invalid user ID");
+        }
         return userProfileRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found  " )
+                        new ResourceNotFoundException("User not found with id: " + id)
                 );
     }
 
@@ -40,11 +50,22 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public UserProfile updateUser(Long id, UserProfile userDetails) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Invalid user ID");
+        }
+        
         UserProfile user = getUserById(id);
+        
         if (userDetails.getUsername() != null) {
+            if (userDetails.getUsername().trim().isEmpty()) {
+                throw new IllegalArgumentException("Username cannot be empty");
+            }
             user.setUsername(userDetails.getUsername());
         }
         if (userDetails.getEmail() != null) {
+            if (userDetails.getEmail().trim().isEmpty()) {
+                throw new IllegalArgumentException("Email cannot be empty");
+            }
             user.setEmail(userDetails.getEmail());
         }
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
@@ -53,6 +74,10 @@ public class UserProfileServiceImpl implements UserProfileService {
 
     @Override
     public void deactivateUser(Long id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("Invalid user ID");
+        }
+        
         UserProfile user = getUserById(id);
         user.setActive(false);
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
