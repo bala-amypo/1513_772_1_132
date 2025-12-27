@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "match_records")
@@ -9,22 +10,29 @@ public class MatchRecord {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @NotNull(message = "User A is required")
     @ManyToOne
     @JoinColumn(name = "user_a_id")
     private UserProfile userA;
     
+    @NotNull(message = "User B is required")
     @ManyToOne
     @JoinColumn(name = "user_b_id")
     private UserProfile userB;
     
+    @NotNull(message = "Skill offered by User A is required")
     @ManyToOne
     @JoinColumn(name = "skill_offered_by_a_id")
     private Skill skillOfferedByA;
     
+    @NotNull(message = "Skill offered by User B is required")
     @ManyToOne
     @JoinColumn(name = "skill_offered_by_b_id")
     private Skill skillOfferedByB;
     
+    @NotBlank(message = "Status is required")
+    @Pattern(regexp = "^(PENDING|APPROVED|REJECTED|COMPLETED|CANCELLED)$", 
+             message = "Status must be PENDING, APPROVED, REJECTED, COMPLETED, or CANCELLED")
     private String status = "PENDING";
     
     public Long getId() { return id; }
