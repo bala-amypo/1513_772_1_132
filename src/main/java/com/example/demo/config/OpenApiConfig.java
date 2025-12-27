@@ -2,13 +2,16 @@ package com.example.demo.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
+import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
+import io.swagger.v3.oas.models.info.License;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -18,19 +21,33 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Skill Barter API")
-                        .version("1.0")
-                        .description("Skill Barter Platform API Documentation"))
+                        .title("Skill Barter Platform API")
+                        .version("1.0.0")
+                        .description("API for Skill Barter Platform - A platform for exchanging skills between users")
+                        .termsOfService("http://swagger.io/terms/")
+                        .contact(new Contact()
+                                .name("API Support")
+                                .email("support@example.com"))
+                        .license(new License()
+                                .name("Apache 2.0")
+                                .url("http://springdoc.org")))
                 .servers(List.of(
-                        new Server().url("https://9037.pro604cr.amypo.ai/").description("Production Server")
+                        new Server()
+                                .url("https://9037.pro604cr.amypo.ai")
+                                .description("Production Server"),
+                        new Server()
+                                .url("http://localhost:8080")
+                                .description("Local Server")
                 ))
-                .addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
                 .components(new Components()
-                        .addSecuritySchemes("bearerAuth",
+                        .addSecuritySchemes("bearer-key",
                                 new SecurityScheme()
                                         .type(SecurityScheme.Type.HTTP)
                                         .scheme("bearer")
                                         .bearerFormat("JWT")
-                                        .description("Enter JWT token (from /api/auth/login)")));
+                                        .in(SecurityScheme.In.HEADER)
+                                        .name("Authorization")))
+                .addSecurityItem(
+                        new SecurityRequirement().addList("bearer-key"));
     }
 }
