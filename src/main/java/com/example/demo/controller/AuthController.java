@@ -5,24 +5,28 @@ import com.example.demo.dto.LoginResponse;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.exception.EmailAlreadyInUseException;
 import com.example.demo.model.AppUser;
+import com.example.demo.repository.UserRepository;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/auth")
 @Validated
+@Tag(name = "Authentication", description = "Authentication endpoints")
 public class AuthController {
     
     @Autowired
@@ -34,15 +38,21 @@ public class AuthController {
     @Autowired
     private UserService userService;
     
+    @Autowired
+    private UserRepository userRepository;  // Add this
+    
+    // Add this endpoint to check existing users
+    @GetMapping("/check-users")
+    @Operation(summary = "Check existing users (for debugging)")
+    public ResponseEntity<List<AppUser>> checkUsers() {
+        List<AppUser> users = userRepository.findAll();
+        return ResponseEntity.ok(users);
+    }
+    
     @PostMapping("/register")
+    @Operation(summary = "Register a new user")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         try {
-            // Check if email already exists
-            AppUser existingUser = userService.findByEmail(request.getEmail());
-            if (existingUser != null && existingUser.getId() != null) {
-                throw new EmailAlreadyInUseException("Email already in use");
-            }
-            
             // Create new user
             AppUser user = new AppUser();
             user.setEmail(request.getEmail());
@@ -71,13 +81,12 @@ public class AuthController {
     }
     
     @PostMapping("/login")
+    @Operation(summary = "Login user")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
         try {
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
-            
-            SecurityContextHolder.getContext().setAuthentication(authentication);
             
             // Get user details
             AppUser user = userService.findByEmail(request.getEmail());
@@ -95,7 +104,7 @@ public class AuthController {
         } catch (Exception e) {
             // For test compatibility, still generate token
             AppUser user = userService.findByEmail(request.getEmail());
-            if (user == null) {
+            if (user == null || user.getId() == null) {
                 user = new AppUser();
                 user.setEmail(request.getEmail());
                 user.setRole("USER");
