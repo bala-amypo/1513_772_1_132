@@ -5,6 +5,7 @@ import com.example.demo.service.MatchmakingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,30 +23,35 @@ public class MatchRecordController {
     private MatchmakingService matchmakingService;
     
     @PostMapping("/generate/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MatchRecord> generate(@PathVariable Long userId) {
         MatchRecord match = matchmakingService.generateMatch(userId);
         return new ResponseEntity<>(match, HttpStatus.CREATED);
     }
     
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MatchRecord> create(@Valid @RequestBody MatchRecord match) {
         MatchRecord createdMatch = matchmakingService.createMatch(match);
         return new ResponseEntity<>(createdMatch, HttpStatus.CREATED);
     }
     
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<MatchRecord> get(@PathVariable Long id) {
         MatchRecord match = matchmakingService.getMatchById(id);
         return ResponseEntity.ok(match);
     }
     
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<MatchRecord> update(@PathVariable Long id, @Valid @RequestBody MatchRecord match) {
         MatchRecord updatedMatch = matchmakingService.updateMatch(id, match);
         return ResponseEntity.ok(updatedMatch);
     }
     
     @PostMapping("/{id}/complete")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, String>> complete(@PathVariable Long id) {
         MatchRecord match = matchmakingService.getMatchById(id);
         match.setStatus("COMPLETED");
@@ -60,6 +66,7 @@ public class MatchRecordController {
     }
     
     @PostMapping("/{id}/cancel")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Map<String, String>> cancel(@PathVariable Long id) {
         MatchRecord match = matchmakingService.getMatchById(id);
         match.setStatus("CANCELLED");
@@ -74,12 +81,14 @@ public class MatchRecordController {
     }
     
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<MatchRecord>> getAll() {
         List<MatchRecord> matches = matchmakingService.getAllMatches();
         return ResponseEntity.ok(matches);
     }
     
     @GetMapping("/user/{userId}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<MatchRecord>> getForUser(@PathVariable Long userId) {
         List<MatchRecord> matches = matchmakingService.getMatchesForUser(userId);
         return ResponseEntity.ok(matches);
