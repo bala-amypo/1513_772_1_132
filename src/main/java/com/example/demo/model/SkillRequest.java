@@ -1,6 +1,7 @@
 package com.example.demo.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 @Entity
 @Table(name = "skill_requests")
@@ -9,15 +10,21 @@ public class SkillRequest {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
+    @NotNull(message = "User is required")
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserProfile user;
     
+    @NotNull(message = "Skill is required")
     @ManyToOne
     @JoinColumn(name = "skill_id")
     private Skill skill;
     
+    @NotBlank(message = "Urgency level is required")
+    @Pattern(regexp = "^(LOW|MEDIUM|HIGH|CRITICAL)$", 
+             message = "Urgency level must be LOW, MEDIUM, HIGH, or CRITICAL")
     private String urgencyLevel;
+    
     private boolean active = true;
     
     public Long getId() { return id; }
