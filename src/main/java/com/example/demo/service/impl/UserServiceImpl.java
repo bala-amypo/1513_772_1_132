@@ -33,11 +33,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     
     @Override
     public AppUser save(AppUser user) {
-        // TEMPORARY: Allow overriding existing users
         Optional<AppUser> existingUser = userRepository.findByEmail(user.getEmail());
         
         if (existingUser.isPresent()) {
-            // Update existing user
             AppUser existing = existingUser.get();
             existing.setPassword(passwordEncoder.encode(user.getPassword()));
             existing.setRole(user.getRole());
@@ -45,10 +43,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             return userRepository.save(existing);
         }
         
-        // Create new user
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         
-        // Set creation timestamp
         if (user.getCreatedAt() == null) {
             user.setCreatedAt(LocalDateTime.now());
         }
