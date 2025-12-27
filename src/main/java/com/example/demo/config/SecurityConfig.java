@@ -39,6 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/h2-console/**").permitAll()
             .antMatchers("/api/auth/**").permitAll()
             .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**").permitAll()
+            .antMatchers("/", "/error", "/favicon.ico").permitAll()  // Allow root and error pages
             // User endpoints - using your actual endpoint paths
             .antMatchers(HttpMethod.GET, "/api/user-profiles/**").hasAnyRole("USER", "ADMIN")
             .antMatchers(HttpMethod.POST, "/api/user-profiles/**").hasRole("ADMIN")
