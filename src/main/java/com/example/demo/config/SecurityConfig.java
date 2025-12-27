@@ -36,11 +36,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
+            // Allow access to documentation and public endpoints
+            .antMatchers("/", "/error", "/favicon.ico", "/api-docs-url").permitAll()
             .antMatchers("/h2-console/**").permitAll()
             .antMatchers("/api/auth/**").permitAll()
-            .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**").permitAll()
-            .antMatchers("/", "/error", "/favicon.ico").permitAll()  // Allow root and error pages
-            // User endpoints - using your actual endpoint paths
+            // Allow all Swagger/OpenAPI endpoints
+            .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**", "/v2/api-docs",
+                    "/v3/api-docs", "/v3/api-docs/**", "/api-docs", "/api-docs/**",
+                    "/webjars/**", "/configuration/**").permitAll()
+            // User endpoints
             .antMatchers(HttpMethod.GET, "/api/user-profiles/**").hasAnyRole("USER", "ADMIN")
             .antMatchers(HttpMethod.POST, "/api/user-profiles/**").hasRole("ADMIN")
             .antMatchers(HttpMethod.PUT, "/api/user-profiles/**").hasRole("ADMIN")
