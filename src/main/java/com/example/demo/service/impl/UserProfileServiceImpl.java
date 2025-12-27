@@ -29,7 +29,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     public UserProfile getUserById(Long id) {
         return userProfileRepository.findById(id)
                 .orElseThrow(() ->
-                        new ResourceNotFoundException("User not found with id: " + id)
+                        new ResourceNotFoundException("User not found  " )
                 );
     }
 
