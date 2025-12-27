@@ -41,6 +41,7 @@ public class UserProfileController {
         return ResponseEntity.ok(updatedUser);
     }
     
+
     
     @PostMapping("/{id}/deactivate")
     @PreAuthorize("hasRole('ADMIN')")
