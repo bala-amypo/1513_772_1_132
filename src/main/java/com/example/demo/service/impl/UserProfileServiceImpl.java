@@ -31,22 +31,16 @@ public class UserProfileServiceImpl implements UserProfileService {
         return userProfileRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND,
-                        "User not found " 
+                        "User not found with id: " + id
                 ));
     }
 
     @Override
-    public void deactivateUser(Long id) {
-        UserProfile user = getUserById(id);
-        user.setActive(false);
-        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        userProfileRepository.save(user);
-    }
-
     public List<UserProfile> getAllUsers() {
         return userProfileRepository.findAll();
     }
 
+    @Override
     public UserProfile updateUser(Long id, UserProfile userDetails) {
         UserProfile user = getUserById(id);
         if (userDetails.getUsername() != null) {
@@ -57,5 +51,13 @@ public class UserProfileServiceImpl implements UserProfileService {
         }
         user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         return userProfileRepository.save(user);
+    }
+
+    @Override
+    public void deactivateUser(Long id) {
+        UserProfile user = getUserById(id);
+        user.setActive(false);
+        user.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        userProfileRepository.save(user);
     }
 }
