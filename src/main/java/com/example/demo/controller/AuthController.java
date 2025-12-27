@@ -97,7 +97,7 @@ public class AuthController {
             
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            // For test compatibility, still generate token
+            
             AppUser user = userService.findByEmail(request.getEmail());
             if (user == null || user.getId() == null) {
                 user = new AppUser();
