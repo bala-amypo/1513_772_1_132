@@ -4,6 +4,7 @@ import com.example.demo.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -11,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -39,29 +39,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/h2-console/**").permitAll()
             .antMatchers("/api/auth/**").permitAll()
             .antMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**").permitAll()
-            // User endpoints
-            .antMatchers(HttpMethod.GET, "/api/users/**").hasAnyRole("USER", "ADMIN")
-            .antMatchers(HttpMethod.POST, "/api/users/**").hasRole("ADMIN")
-            .antMatchers(HttpMethod.PUT, "/api/users/**").hasRole("ADMIN")
-            .antMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("ADMIN")
+            // User endpoints - using your actual endpoint paths
+            .antMatchers(HttpMethod.GET, "/api/user-profiles/**").hasAnyRole("USER", "ADMIN")
+            .antMatchers(HttpMethod.POST, "/api/user-profiles/**").hasRole("ADMIN")
+            .antMatchers(HttpMethod.PUT, "/api/user-profiles/**").hasRole("ADMIN")
             // Skill endpoints
             .antMatchers(HttpMethod.GET, "/api/skills/**").hasAnyRole("USER", "ADMIN")
             .antMatchers(HttpMethod.POST, "/api/skills/**").hasRole("ADMIN")
             .antMatchers(HttpMethod.PUT, "/api/skills/**").hasRole("ADMIN")
-            .antMatchers(HttpMethod.DELETE, "/api/skills/**").hasRole("ADMIN")
             // Skill Request endpoints
-            .antMatchers(HttpMethod.GET, "/api/requests/**").hasAnyRole("USER", "ADMIN")
-            .antMatchers(HttpMethod.POST, "/api/requests/**").hasAnyRole("USER", "ADMIN")
-            .antMatchers(HttpMethod.PUT, "/api/requests/**").hasAnyRole("USER", "ADMIN")
-            .antMatchers(HttpMethod.DELETE, "/api/requests/**").hasRole("ADMIN")
+            .antMatchers(HttpMethod.GET, "/api/skill-requests/**").hasAnyRole("USER", "ADMIN")
+            .antMatchers(HttpMethod.POST, "/api/skill-requests/**").hasAnyRole("USER", "ADMIN")
+            .antMatchers(HttpMethod.PUT, "/api/skill-requests/**").hasAnyRole("USER", "ADMIN")
             // Skill Offer endpoints
-            .antMatchers(HttpMethod.GET, "/api/offers/**").hasAnyRole("USER", "ADMIN")
-            .antMatchers(HttpMethod.POST, "/api/offers/**").hasAnyRole("USER", "ADMIN")
-            .antMatchers(HttpMethod.PUT, "/api/offers/**").hasAnyRole("USER", "ADMIN")
-            .antMatchers(HttpMethod.DELETE, "/api/offers/**").hasRole("ADMIN")
+            .antMatchers(HttpMethod.GET, "/api/skill-offers/**").hasAnyRole("USER", "ADMIN")
+            .antMatchers(HttpMethod.POST, "/api/skill-offers/**").hasAnyRole("USER", "ADMIN")
+            .antMatchers(HttpMethod.PUT, "/api/skill-offers/**").hasAnyRole("USER", "ADMIN")
             // Match endpoints
-            .antMatchers(HttpMethod.GET, "/api/match/**").hasAnyRole("USER", "ADMIN")
-            .antMatchers(HttpMethod.POST, "/api/match/**").hasRole("ADMIN")
+            .antMatchers(HttpMethod.GET, "/api/match-records/**").hasAnyRole("USER", "ADMIN")
+            .antMatchers(HttpMethod.POST, "/api/match-records/**").hasRole("ADMIN")
+            .antMatchers(HttpMethod.PUT, "/api/match-records/**").hasRole("ADMIN")
             .anyRequest().authenticated()
             .and()
             .headers().frameOptions().disable();
