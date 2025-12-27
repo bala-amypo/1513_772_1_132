@@ -25,7 +25,7 @@ public class SkillRequestServiceImpl implements SkillRequestService {
     @Override
     public SkillRequest getRequestById(Long id) {
         return skillRequestRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Skill request not found with id: " + id));
+                .orElseThrow(() -> new ResourceNotFoundException("Skill request not found " ));
     }
 
     @Override
