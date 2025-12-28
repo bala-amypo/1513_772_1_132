@@ -31,7 +31,6 @@ public class AppUser {
     
     private Boolean active = true;
     
-    // Constructors
     public AppUser() {}
     
     public AppUser(String email, String password, String role) {
@@ -42,7 +41,6 @@ public class AppUser {
         this.active = true;
     }
     
-    // Getters and setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     
