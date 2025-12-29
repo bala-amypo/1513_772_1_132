@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -60,13 +62,11 @@ public class AuthController {
             
             AppUser savedUser = userService.save(user);
             
-            String token = jwtUtil.generateToken(savedUser.getEmail(), savedUser.getRole(), savedUser.getId());
-            
-            LoginResponse response = new LoginResponse();
-            response.setEmail(savedUser.getEmail());
-            response.setToken(token);
-            response.setRole(savedUser.getRole());
-            response.setUserId(savedUser.getId());
+            Map<String, Object> response = new HashMap<>();
+            response.put("message", "User registered successfully");
+            response.put("email", savedUser.getEmail());
+            response.put("role", savedUser.getRole());
+            response.put("userId", savedUser.getId());
             
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (EmailAlreadyInUseException e) {
